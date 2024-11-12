@@ -1,0 +1,13 @@
+.header {
+    background: linear-gradient(90deg, #0a3d62, #3c6382);
+    color: white;
+    padding: 10px 20px;
+}
+
+.header a {
+    color: white;
+    text-decoration: none;
+}
+.header a:hover {
+    color: #242020;
+}
