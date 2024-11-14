@@ -10,6 +10,7 @@
     - [3. Crear entorno virtual, instalar requisitos, ejecutar](#3-crear-entorno-virtual-instalar-requisitos-ejecutar)
     - [4. Desarrollo de funcionalidades en el código](#4-desarrollo-de-funcionalidades-en-el-código)
     - [5. Metodología para realizar cambios](#5-metodología-para-realizar-cambios)
+    - [6. Recarga de BBDD](#6-recarga-de-bbdd)
 
 
 ---
@@ -87,3 +88,8 @@ En cada módulo, se tienen los siguientes archivos:
 ### 5. Metodología para realizar cambios
 
 Se tiene una rama principal, que requiere la aprobación del administrador para ser modificada. Para el desarrollo, se deberán crear ramas a partir de `develop`, y una vez finalizado el desarrollo de una funcionalidad, crear una `pull request`.
+
+### 6. Recarga de BBDD
+Comando para reconstruir la base de datos y repoblarla:
+
+`python manage.py reset_and_populate_db`

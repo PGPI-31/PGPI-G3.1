@@ -1,0 +1,129 @@
+[
+    {
+        "model": "boats.boattype",
+        "pk": 1,
+        "fields": {
+            "name": "Yacht",
+            "description": "A luxury boat designed for pleasure and comfortable travel."
+        }
+    },
+    {
+        "model": "boats.boattype",
+        "pk": 2,
+        "fields": {
+            "name": "Sailboat",
+            "description": "A boat propelled by sails and used for racing or leisure."
+        }
+    },
+    {
+        "model": "boats.boatmodel",
+        "pk": 1,
+        "fields": {
+            "boat_type": 1,
+            "name": "Luxury Cruiser",
+            "capacity": 10,
+            "brand": "Sea Dream",
+            "image": "boat_images/luxury_cruiser.jpg"
+        }
+    },
+    {
+        "model": "boats.boatmodel",
+        "pk": 2,
+        "fields": {
+            "boat_type": 2,
+            "name": "Ocean Racer",
+            "capacity": 4,
+            "brand": "Wave Master",
+            "image": "boat_images/ocean_racer.jpg"
+        }
+    },
+    {
+        "model": "boats.port",
+        "pk": 1,
+        "fields": {
+            "name": "Harbor Marina",
+            "address": "123 Marina Blvd, Seaside"
+        }
+    },
+    {
+        "model": "boats.boatinstance",
+        "pk": 1,
+        "fields": {
+            "model": 1,
+            "name": "Yacht-1",
+            "port": 1,
+            "creation_date": "2020-05-10",
+            "available": true,
+            "price_per_day": "500.00"
+        }
+    },
+    {
+        "model": "boats.boatinstance",
+        "pk": 2,
+        "fields": {
+            "model": 2,
+            "name": "Sail-1",
+            "port": 1,
+            "creation_date": "2019-07-18",
+            "available": true,
+            "price_per_day": "300.00"
+        }
+    },
+    {
+        "model": "authentication.user",
+        "pk": 1,
+        "fields": {
+            "username": "testuser",
+            "email": "testuser@example.com",
+            "telephone": "123456789",
+            "address": "456 Sample St",
+            "dni": "A12345678",
+            "birthdate": "1995-02-15",
+            "password": "pbkdf2_sha256$870000$ws0ub9jATXfKHC0OcHOEqZ$niu9jyeLB1SPhM28/qkeV/ILYv21oIMw/pkFwaRFD8k="
+        }
+    },
+    {
+        "model": "orders.order",
+        "pk": 1,
+        "fields": {
+            "user": 1,
+            "order_date": "2023-03-16T17:41:28+00:00",
+            "start_date": "2023-10-20",
+            "end_date": "2023-10-25",
+            "total_price": "3000.00",
+            "status": "completed"
+        }
+    },
+    {
+        "model": "orders.orderboat",
+        "pk": 1,
+        "fields": {
+            "order": 1,
+            "boat": 1,
+            "days": 5,
+            "price_per_day": "500.00",
+            "price": "2500.00"
+        }
+    },
+    {
+        "model": "orders.orderboat",
+        "pk": 2,
+        "fields": {
+            "order": 1,
+            "boat": 2,
+            "days": 5,
+            "price_per_day": "100.00",
+            "price": "500.00"
+        }
+    },
+    {
+        "model": "orders.pago",
+        "pk": 1,
+        "fields": {
+            "order": 1,
+            "payment_address": "456 Sample St",
+            "method": "card",
+            "account_number": "1234567890"
+        }
+    }
+]
