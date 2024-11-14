@@ -11,3 +11,19 @@
 .header a:hover {
     color: #242020;
 }
+
+body {
+    font-family: 'Bebas Neue', sans-serif; /* Aplica la fuente Bebas Neue */
+    background-color: #f0f8ff; /* Azul claro */
+}
+
+.col-md-6 {
+    border: 4px solid #0a3d62; /* Borde azul oscuro de 2 píxeles */
+    background-color: transparent; /* Fondo transparente */
+    border-radius: 8px; /* Borde redondeado (opcional) */
+    padding: 20px;
+}
+
+.form-label{
+    padding-right: 20px;
+}
