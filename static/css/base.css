@@ -12,18 +12,30 @@
     color: #242020;
 }
 
-body {
-    font-family: 'Bebas Neue', sans-serif; /* Aplica la fuente Bebas Neue */
-    background-color: #f0f8ff; /* Azul claro */
-}
-
 .col-md-6 {
-    border: 4px solid #0a3d62; /* Borde azul oscuro de 2 píxeles */
-    background-color: transparent; /* Fondo transparente */
-    border-radius: 8px; /* Borde redondeado (opcional) */
+    border: solid rgba(241, 238, 238, 0.734); /* Punto y coma aquí */
+    background-color: #f0f8ff; /* Punto y coma aquí */
+    border-radius: 8px; /* Punto y coma aquí */
     padding: 20px;
 }
 
 .form-label{
-    padding-right: 20px;
+    width: 100%;
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    font-size: 14px;
+}
+
+.form-group input{
+    width:100%;
+    padding: 10px;
+    font-size:14px;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+input{
+    width: 100%; /* Hace que el div ocupe todo el ancho disponible */
+    display: block; /* Asegura que el div se comporte como un bloque y ocupe el espacio completo */
 }
