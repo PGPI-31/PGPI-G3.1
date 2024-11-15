@@ -11,3 +11,31 @@
 .header a:hover {
     color: #242020;
 }
+
+.col-md-6 {
+    border: solid rgba(241, 238, 238, 0.734); /* Punto y coma aquí */
+    background-color: #f0f8ff; /* Punto y coma aquí */
+    border-radius: 8px; /* Punto y coma aquí */
+    padding: 20px;
+}
+
+.form-label{
+    width: 100%;
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    font-size: 14px;
+}
+
+.form-group input{
+    width:100%;
+    padding: 10px;
+    font-size:14px;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+input{
+    width: 100%; /* Hace que el div ocupe todo el ancho disponible */
+    display: block; /* Asegura que el div se comporte como un bloque y ocupe el espacio completo */
+}
