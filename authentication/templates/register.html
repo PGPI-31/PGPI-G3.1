@@ -6,10 +6,10 @@
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-6">
-            <h2 class="text-center mb-4">Register</h2>
+            <h2 class="text-center mb-4">Registrarse</h2>
             {% if form.errors %}
                 <div class="alert alert-danger">
-                    <strong>Please correct the errors below:</strong>
+                    <strong>Corrige los errores siguientes:</strong>
                 </div>
             {% endif %}
             <form method="post" onsubmit="return validatePasswords()">
@@ -27,10 +27,10 @@
                         {% endif %}
                     </div>
                 {% endfor %}
-                <button type="submit" class="btn btn-primary w-100">Register</button>
+                <button type="submit" class="btn btn-primary w-100">Registrarse</button>
             </form>
             <p class="text-center mt-3">
-                Already have an account? <a href="{% url 'login' %}">Login here</a>.
+                ¿Ya tienes una cuenta? <a href="{% url 'login' %}">Iniciar sesión</a>.
             </p>
         </div>
     </div>
