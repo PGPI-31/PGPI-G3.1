@@ -11,6 +11,7 @@
     - [4. Desarrollo de funcionalidades en el código](#4-desarrollo-de-funcionalidades-en-el-código)
     - [5. Metodología para realizar cambios](#5-metodología-para-realizar-cambios)
     - [6. Recarga de BBDD](#6-recarga-de-bbdd)
+    - [7. Docker](#7-docker)
 
 
 ---
@@ -93,3 +94,15 @@ Se tiene una rama principal, que requiere la aprobación del administrador para 
 Comando para reconstruir la base de datos y repoblarla:
 
 `python manage.py reset_and_populate_db`
+
+
+### 7. Docker
+Desde cmd en root en vscode:
+
+`docker-compose build --no-cache`
+
+`docker-compose up`
+
+Accesible en:
+
+`http://localhost:8000/`

@@ -1,0 +1,35 @@
+services:
+  web:
+    container_name: web_app_container
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: safeport:1.0
+    command: python manage.py runserver 0.0.0.0:8000
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    environment:
+      POSTGRES_DB: safeport
+      POSTGRES_USER: safeport_user
+      POSTGRES_PASSWORD: safeport_password
+      POSTGRES_HOST: db
+      POSTGRES_PORT: 5432
+    volumes:
+      - .:/usr/src/app
+      - ./static:/usr/src/app/static
+      - ./media:/usr/src/app/media
+
+  db:
+    container_name: postresql_container
+    image: postgres:17
+    environment:
+      POSTGRES_DB: safeport
+      POSTGRES_USER: safeport_user
+      POSTGRES_PASSWORD: safeport_password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
