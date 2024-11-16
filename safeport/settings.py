@@ -92,7 +92,7 @@ DATABASES = {
         'HOST': os.getenv('POSTGRES_HOST', 'localhost'),
         'PORT': os.getenv('POSTGRES_PORT', '5432'),
         'OPTIONS': {
-            'options': '-c search_path=public'
+            'options': f"-c search_path={os.getenv('DB_SCHEMA', 'public')}"
         },
     }
 }
