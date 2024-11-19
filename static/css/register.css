@@ -1,0 +1,30 @@
+.register-page input, 
+.register-page select, 
+.register-page textarea {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.register-page label {
+    font-weight: bold;
+}
+
+.register-page .btn {
+    font-size: 1rem;
+    padding: 0.75rem;
+}
+
+.btn-dark-blue {
+    background-color: #003366;
+    border-color: #003366;
+    color: white;
+}
+
+.btn-dark-blue:hover {
+    background-color: #002244;
+    border-color: #002244;
+    color: white;
+}
