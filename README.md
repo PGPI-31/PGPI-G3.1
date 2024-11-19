@@ -1,5 +1,7 @@
 # Repositorio del proyecto de PGPI del grupo G3.1
 
+Proyecto desplegado: `https://safeport.onrender.com`
+
 ## Instrucciones de instalación y desarrollo del proyecto
 
 - [Repositorio del proyecto de PGPI del grupo G3.1](#repositorio-del-proyecto-de-pgpi-del-grupo-g31)
