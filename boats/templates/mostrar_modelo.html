@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card mb-4">
+    <div class="card-header">
+        <h2>{{ boat_model.name }}</h2>
+    </div>
+    <div class="card-body">
+        <div class="row align-items-center">
+            <!-- Image Column -->
+            <div class="col-md-4">
+                {% if boat_model.image %}
+                    <img src="{{ boat_model.image.url }}" alt="{{ boat_model.name }}" class="img-fluid rounded">
+                {% endif %}
+            </div>
+            <!-- Text Column -->
+            <div class="col-md-8">
+                <p><strong>Tipo:</strong> {{ boat_model.boat_type.name }}</p>
+                <p><strong>Marca:</strong> {{ boat_model.brand }}</p>
+                <p><strong>Capacidad:</strong> {{ boat_model.capacity }} personas</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Boat Instances -->
+<h3>Barcos disponibles</h3>
+{% if boat_instances %}
+    <div class="list-group mb-4">
+        {% for instance in boat_instances %}
+            <a href="#" class="list-group-item list-group-item-action">
+                <h5 class="mb-1">{{ instance.name }}</h5>
+                <p class="mb-1">
+                    <strong>Puerto:</strong> {{ instance.port.name }}<br>
+                    <strong>Disponible:</strong> {{ instance.available|yesno:"Sí,No" }}<br>
+                    <strong>Precio por día:</strong> ${{ instance.price_per_day }}
+                </p>
+            </a>
+        {% endfor %}
+    </div>
+{% else %}
+    <p>No hay barcos de este modelo</p>
+{% endif %}
+{% endblock %}

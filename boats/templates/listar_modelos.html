@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Lista de Modelos</h1>
+<div class="product-grid mb-4">
+    {% for modelo in modelos %}
+    <a href="{% url 'mostrar_modelo' modelo.id %}" class="text-decoration-none">
+        <div class="product-card">
+            <img src="{{ modelo.image.url }}" alt="Imagen de {{ modelo.name }}">
+            <h2>{{ modelo.name }}</h2>
+            <p><strong>Capacidad:</strong> {{ modelo.capacity }}</p>
+            <p><strong>Marca:</strong> {{ modelo.brand }}</p>
+        </div>
+    </a>
+    {% empty %}
+    <p>No hay productos disponibles.</p>
+    {% endfor %}
+</div>
+{% endblock %}
