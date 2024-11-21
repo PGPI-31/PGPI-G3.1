@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404, render, redirect
 from .models import BoatInstance, BoatModel, BoatType, Port
-from .forms import BoatInstanceForm
+from .forms import BoatInstanceForm, BoatTypeForm, BoatModelForm, PortForm
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden
 
@@ -28,7 +28,7 @@ def listar_puertos(request):
 @login_required
 def create_boat_instance(request):
     if not request.user.is_superuser:
-        return HttpResponseForbidden("You do not have permission to create a boat instance.")
+        return HttpResponseForbidden("No tienes permiso para crear una instancia de barco.")
     if request.method == 'POST':
         form = BoatInstanceForm(request.POST)
         if form.is_valid():

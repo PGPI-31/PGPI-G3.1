@@ -6,7 +6,7 @@
     {% for modelo in modelos %}
     <a href="{% url 'mostrar_modelo' modelo.id %}" class="text-decoration-none">
         <div class="product-card">
-            <img src="{{ modelo.image.url }}" alt="Imagen de {{ modelo.name }}">
+            <img src="{{ modelo.image.url }}" alt="Imagen de {{ modelo.name }}" >
             <h2>{{ modelo.name }}</h2>
             <p><strong>Tipo:</strong> {{ modelo.boat_type.name }}</p>
             <p><strong>Capacidad:</strong> {{ modelo.capacity }}</p>
@@ -14,7 +14,7 @@
         </div>
     </a>
     {% empty %}
-    <p>No hay productos disponibles.</p>
+    <p>No hay modelos disponibles.</p>
     {% endfor %}
 </div>
 {% endblock %}

@@ -6,7 +6,7 @@ class BoatType(models.Model):
     description = models.TextField()
 
     def __str__(self):
-        return self.nombre
+        return self.name
 
 
 class BoatModel(models.Model):
