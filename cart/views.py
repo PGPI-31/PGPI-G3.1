@@ -34,17 +34,21 @@ def checkout(request):
     # Implementación de finalización del alquiler
     return render(request, 'formalizacion.html')
 
+from django.shortcuts import render, get_object_or_404
+from .models import Cart, CartItem
+from django.contrib.auth.decorators import login_required
+
 @login_required
 def view_cart(request):
     """
     Muestra la cesta del usuario actual.
-    Si la cesta no existe o está vacía, se muestra un mensaje indicando que está vacía.
+    Si no existe, la crea al añadir un objeto posteriormente.
     """
-    # Buscar o crear la cesta asociada al usuario
-    cart, created = Cart.objects.get_or_create(user_id=request.user, defaults={})
-    # Obtener los elementos de la cesta
-    cart_items = CartItem.objects.filter(cart_id=cart)
+    # Buscar la cesta asociada al usuario, pero pasar el ID explícito
+    cart = Cart.objects.filter(user_id=request.user.id).first()
+    cart_items = CartItem.objects.filter(cart_id=cart) if cart else []
     
     return render(request, 'mostrar_cesta.html', {'cart_items': cart_items})
+
 
 
