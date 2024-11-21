@@ -14,6 +14,7 @@ from pathlib import Path
 import os
 from django.conf.global_settings import DEFAULT_FROM_EMAIL, EMAIL_BACKEND,\
     EMAIL_HOST, EMAIL_USE_TLS, EMAIL_HOST_USER, EMAIL_HOST_PASSWORD
+from decouple import config
 
 
 
@@ -159,6 +160,6 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587  # Puedes usar 25, 587 o 465 (SSL)
 EMAIL_USE_TLS = True  # Usar TLS para la seguridad de la conexión
-EMAIL_HOST_USER = 'ivanbetico8@gmail.com'  # Usar la dirección de correo completa como usuario
-EMAIL_HOST_PASSWORD = 'vmwu nrks xiqb qwnl'  # Tu clave API de google
+EMAIL_HOST_USER = config('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
