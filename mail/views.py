@@ -4,7 +4,7 @@ from mail.api.views import send_user_mail
 from django.contrib.auth.decorators import login_required
 
 
-@login_required
+@login_required(login_url='/auth/login/')
 def test_send_mail_view(request):
     # Example user
     user = User(username=request.user.username, first_name="Test", email=request.user.email)
