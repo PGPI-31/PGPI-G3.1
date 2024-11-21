@@ -33,6 +33,11 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'listar_productos' %}">Ver Productos</a>
                     </li>
+                    {% if user.is_authenticated%}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'mostrar_cesta' %}">Tu cesta</a>
+                    </li>
+                    {% endif %}
                     {% if user.is_authenticated and user.is_superuser %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'crear_productos' %}">Añadir Productos</a>
