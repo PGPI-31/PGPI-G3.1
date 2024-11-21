@@ -12,6 +12,11 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 import os
+from django.conf.global_settings import DEFAULT_FROM_EMAIL, EMAIL_BACKEND,\
+    EMAIL_HOST, EMAIL_USE_TLS, EMAIL_HOST_USER, EMAIL_HOST_PASSWORD
+
+
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -46,7 +51,8 @@ INSTALLED_APPS = [
     'authentication',
     'boats',
     'orders',
-    'cart'
+    'cart',
+    'mail'
 ]
 
 MIDDLEWARE = [
@@ -146,3 +152,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 AUTH_USER_MODEL = 'authentication.User'
+
+#Automatic mail
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587  # Puedes usar 25, 587 o 465 (SSL)
+EMAIL_USE_TLS = True  # Usar TLS para la seguridad de la conexión
+EMAIL_HOST_USER = 'ivanbetico8@gmail.com'  # Usar la dirección de correo completa como usuario
+EMAIL_HOST_PASSWORD = 'vmwu nrks xiqb qwnl'  # Tu clave API de google
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
