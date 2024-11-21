@@ -29,7 +29,9 @@ urlpatterns = [
     path('', home, name='home'),
     path('admin/', admin.site.urls),
     path('auth/', include('authentication.urls')),
-    path('productos/', include('boats.urls'))
+    path('productos/', include('boats.urls')),
+    path('cesta/', include('cart.urls'))
+
 
 ]
 urlpatterns += static(settings.STATIC_URL, document_root=os.path.join(settings.BASE_DIR, 'static'))

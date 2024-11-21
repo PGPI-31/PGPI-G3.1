@@ -30,13 +30,21 @@ def remove_from_cart(request, item_id):
     return redirect('view_cart')
 
 @login_required
-def view_cart(request):
-    cart = Cart.objects.filter(user_id=request.user).first()
-    cart_items = CartItem.objects.filter(cart_id=cart) if cart else []
-    return render(request, 'cart/view_cart.html', {'cart_items': cart_items})
-
-@login_required
 def checkout(request):
     # Implementación de finalización del alquiler
-    return render(request, 'cart/checkout.html')
+    return render(request, 'formalizacion.html')
+
+@login_required
+def view_cart(request):
+    """
+    Muestra la cesta del usuario actual.
+    Si la cesta no existe o está vacía, se muestra un mensaje indicando que está vacía.
+    """
+    # Buscar o crear la cesta asociada al usuario
+    cart, created = Cart.objects.get_or_create(user_id=request.user, defaults={})
+    # Obtener los elementos de la cesta
+    cart_items = CartItem.objects.filter(cart_id=cart)
+    
+    return render(request, 'mostrar_cesta.html', {'cart_items': cart_items})
+
 
