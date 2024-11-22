@@ -17,8 +17,8 @@
         <tbody>
             {% for item in cart_items %}
             <tr>
-                <td>{{ item.boat_instance_id.name }}</td>
-                <td>{{ item.boat_instance_id.port.name }}</td>
+                <td>{{ item.boat_instance.name }}</td>
+                <td>{{ item.boat_instance.port.name }}</td>
                 <td>{{ item.number_of_days }}</td>
                 <td>${{ item.price_per_day }}</td>
                 <td>${{ item.total_price }}</td>
