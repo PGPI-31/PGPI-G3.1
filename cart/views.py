@@ -62,7 +62,7 @@ def add_to_cart(request, boat_id):
         except ValueError:
             return render(request, 'error.html', {'message': 'Formato de fecha inválido.'})
     
-    return redirect('mostrar_cesta')
+    return redirect(request.META.get('HTTP_REFERER', 'index'))
 
 
 @login_required
