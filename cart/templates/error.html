@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+
+{% block title %}Error{% endblock %}
+
+{% block content %}
+    <p>{{ message }}</p>
+    <a href="{% url 'mostrar_cesta' %}">Volver al carrito</a>
+{% endblock %}

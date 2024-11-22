@@ -10,47 +10,55 @@ def add_to_cart(request, boat_id):
     boat_instance = get_object_or_404(BoatInstance, id=boat_id)
     start_date = request.POST.get('start_date')
     end_date = request.POST.get('end_date')
-
+    
     if start_date and end_date:
         # Convertir las fechas a objetos datetime.date
         try:
             start_date = datetime.strptime(start_date, '%Y-%m-%d').date()
             end_date = datetime.strptime(end_date, '%Y-%m-%d').date()
             
-            # Validar las fechas
-            if start_date >= end_date:
-                return render(request, 'error.html', {'message': 'La fecha de fin debe ser posterior a la fecha de inicio.'})
-
             # Calcular número de días y precio total
             number_of_days = (end_date - start_date).days
+            if number_of_days <= 0:
+                return render(request, 'error.html', {'message': 'La fecha de fin debe ser posterior a la fecha de inicio.'})
+            
             total_price = boat_instance.price_per_day * number_of_days
             
-            # Obtener o crear el carrito del usuario con fechas válidas
+            # Obtener o crear el carrito del usuario
             cart, created = Cart.objects.get_or_create(
-                user=request.user,
-                start_date=start_date,
-                end_date=end_date,
+                user_id=request.user.id,
                 defaults={
                     'created_at': datetime.now(),
-                    'updated_at': datetime.now()
+                    'updated_at': datetime.now(),
+                    'start_date': start_date,
+                    'end_date': end_date
                 }
             )
             
-            # Si el carrito ya existe, actualizamos las fechas si es necesario
+            # Si el carrito ya existe, actualizamos la fecha de actualización y la fecha de inicio y fin
             if not created:
+                cart.updated_at = datetime.now()
                 cart.start_date = start_date
                 cart.end_date = end_date
-                cart.updated_at = datetime.now()
                 cart.save()
-            
-            # Crear un nuevo elemento en la cesta
-            CartItem.objects.create(
-                cart=cart,
-                boat_instance=boat_instance,
-                number_of_days=number_of_days,
-                price_per_day=boat_instance.price_per_day,
-                total_price=total_price
-            )
+
+            # Verificar si el producto ya está en la cesta
+            existing_item = CartItem.objects.filter(cart_id=cart, boat_instance_id=boat_instance).first()
+            if existing_item:
+                # Si el producto ya está en la cesta, actualizamos los días y el precio total
+                existing_item.number_of_days = number_of_days
+                existing_item.price_per_day = boat_instance.price_per_day
+                existing_item.total_price = total_price
+                existing_item.save()
+            else:
+                # Crear un nuevo elemento en la cesta
+                CartItem.objects.create(
+                    cart_id=cart.id,
+                    boat_instance_id=boat_instance.id,
+                    number_of_days=number_of_days,
+                    price_per_day=boat_instance.price_per_day,
+                    total_price=total_price
+                )
         except ValueError:
             return render(request, 'error.html', {'message': 'Formato de fecha inválido.'})
     
@@ -65,7 +73,7 @@ def remove_from_cart(request, item_id):
 
 @login_required
 def checkout(request):
-    # Implementación de finalización del alquiler
+    # Implementación de formalización del alquiler
     return render(request, 'formalizacion.html')
 
 from django.shortcuts import render, get_object_or_404
