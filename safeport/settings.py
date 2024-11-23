@@ -15,6 +15,7 @@ import os
 from django.conf.global_settings import DEFAULT_FROM_EMAIL, EMAIL_BACKEND,\
     EMAIL_HOST, EMAIL_USE_TLS, EMAIL_HOST_USER, EMAIL_HOST_PASSWORD
 from decouple import config
+from django.contrib.messages import constants as messages
 
 
 
@@ -164,3 +165,12 @@ EMAIL_USE_TLS = True  # Usar TLS para la seguridad de la conexión
 EMAIL_HOST_USER = config('EMAIL_HOST_USER', '')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', '')
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+
+MESSAGE_TAGS = {
+    messages.DEBUG: 'secondary',
+    messages.INFO: 'info',
+    messages.SUCCESS: 'success',
+    messages.WARNING: 'warning',
+    messages.ERROR: 'danger',  # Maps error messages to Bootstrap's alert-danger
+}

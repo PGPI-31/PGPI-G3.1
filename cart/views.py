@@ -4,6 +4,8 @@ from datetime import datetime
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 
+from boats.models import BoatModel, Port
+
 from .models import BoatInstance, Cart, CartItem
 from django.contrib.auth.decorators import login_required
 
@@ -88,3 +90,57 @@ def checkout(request):
 
     return render(request, 'checkout.html', {'cart': cart})
 
+def add_to_cart_catalogue(request, model_id):
+    if request.method == "POST":
+        # Retrieve data from POST request
+        start_date = request.POST.get('start_date')
+        end_date = request.POST.get('end_date')
+        port_id = request.POST.get('dock')
+
+        # Validate the dates
+        try:
+            start_date = datetime.strptime(start_date, '%Y-%m-%d').date()
+            end_date = datetime.strptime(end_date, '%Y-%m-%d').date()
+            if end_date <= start_date:
+                raise ValueError("La fecha de fin debe ser posterior a la de inicio.")
+        except (ValueError, TypeError) as e:
+            messages.error(request, f"Fechas inválidas: {e}")
+            return redirect('ver_catalogo')
+
+        # Get the port and boat model
+        port = get_object_or_404(Port, id=port_id)
+        boat_model = get_object_or_404(BoatModel, id=model_id)
+
+        # Check if there is an available boat instance of this model at the port
+        available_instance = BoatInstance.objects.filter(
+            model=boat_model,
+            port=port,
+            available=True
+        ).exclude(
+            cartitem__start_date__lt=end_date,
+            cartitem__end_date__gt=start_date,
+        ).first()
+
+        if not available_instance:
+            messages.error(request, f"No hay barcos {boat_model.name} en {port.name} disponibles para la fecha seleccionada.")
+            return redirect(request.META.get('HTTP_REFERER', 'index'))
+
+        # Get or create the user's cart
+        cart, created = Cart.objects.get_or_create(user=request.user)
+
+        # Add the item to the cart
+        number_of_days = (end_date - start_date).days
+        CartItem.objects.create(
+            cart=cart,
+            boat_instance=available_instance,
+            start_date=start_date,
+            end_date=end_date,
+            number_of_days=number_of_days,
+            price_per_day=available_instance.price_per_day,
+        )
+
+        messages.success(request, f"{boat_model.name} ha sido añadido a tu cesta.")
+        return redirect(request.META.get('HTTP_REFERER', 'index'))
+
+    # If the request is not POST, redirect to catalogue
+    return redirect('catalogue')

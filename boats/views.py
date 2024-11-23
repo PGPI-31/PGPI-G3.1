@@ -4,6 +4,10 @@ from .forms import BoatInstanceForm, BoatTypeForm, BoatModelForm, PortForm
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden
 
+def ver_catalogo(request):
+    modelos = BoatModel.objects.all()
+    ports = Port.objects.all()
+    return render(request, 'catalogo.html', {'modelos': modelos, 'ports': ports})
 
 def listar_modelos(request):
     modelos = BoatModel.objects.all()
