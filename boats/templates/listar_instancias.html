@@ -7,7 +7,7 @@
 <div class="product-grid mb-4">
     {% for producto in productos %}
     <div class="product-card">
-        <img src="{{ producto.model.image.url }}" alt="Imagen de {{ producto.name }}">
+        <img src="{{ producto.model.image.url }}" alt="Imagen de {{ producto.name }}" class="img-fluid">
         <h2>{{ producto.name }}</h2>
         <p><strong>Precio por día:</strong> {{ producto.price_per_day }} €</p>
         <p>
@@ -22,6 +22,26 @@
         <p><strong>Ubicación:</strong> {{ producto.port.address }}</p>
         <p><strong>Capacidad:</strong> {{ producto.model.capacity }}</p>
         <p><strong>Marca:</strong> {{ producto.model.brand }}</p>
+        
+        <!-- Botón para añadir a la cesta -->
+        {% if user.is_authenticated %}
+
+        {% if producto.available %}
+        <form action="{% url 'adicion_cesta' producto.id %}" method="post" class="mt-3">
+            {% csrf_token %}
+            <label for="start_date_{{ producto.id }}">Fecha de inicio:</label>
+            <input type="date" id="start_date_{{ producto.id }}" name="start_date" required>
+            
+            <label for="end_date_{{ producto.id }}">Fecha de fin:</label>
+            <input type="date" id="end_date_{{ producto.id }}" name="end_date" required>
+            
+            <button type="submit" class="btn btn-primary mt-2">Añadir a la Cesta</button>
+        </form>
+        {% else %}
+        <p class="text-danger">Este producto no está disponible para alquilar.</p>
+        {% endif %}
+        {% endif %}
+
     </div>
     {% empty %}
     <p>No hay productos disponibles.</p>

@@ -12,4 +12,5 @@ urlpatterns = [
     path('', views.listar_productos, name='listar_productos'),
     path('create/', views.create_boat_instance, name='crear_productos'),
     path('modelos/<int:model_id>/', views.mostrar_modelo, name='mostrar_modelo'),
+
 ]

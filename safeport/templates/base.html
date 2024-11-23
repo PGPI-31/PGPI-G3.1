@@ -51,6 +51,9 @@
                 <li><a href="{% url 'home' %}">Inicio</a></li>
                 <li><a href="{% url 'listar_productos' %}">Ver productos</a></li>
                 <li><a href="{% url 'listar_modelos' %}">Ver modelos</a></li>
+                {% if user.is_authenticated %}
+                    <li><a href="{% url 'mostrar_cesta' %}">Ver cesta</a></li>
+                {% endif %}
                 {% if user.is_authenticated and user.is_superuser %}
                     <li><a href="{% url 'listar_tipos' %}">Ver tipos</a></li>
                     <li><a href="{% url 'listar_puertos' %}">Ver puertos</a></li>
