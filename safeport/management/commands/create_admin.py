@@ -13,6 +13,8 @@ class Command(BaseCommand):
         if not User.objects.filter(is_superuser=True).exists():
             User.objects.create_superuser(
                 email=email,
+                name="Admin",
+                surname="User",
                 password=password,
                 telephone='1234567890',
                 address='Admin Address',

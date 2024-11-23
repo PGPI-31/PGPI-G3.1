@@ -803,6 +803,8 @@
         "pk": 1,
         "fields": {
             "email": "user@test.com",
+            "name": "Test User",
+            "surname": "Test Surname",
             "telephone": "123456789",
             "address": "456 Sample St",
             "dni": "A12345678",
@@ -816,8 +818,6 @@
         "fields": {
             "user": 1,
             "order_date": "2023-03-16T17:41:28+00:00",
-            "start_date": "2023-10-20",
-            "end_date": "2023-10-25",
             "total_price": "3000.00",
             "status": "completed"
         }
@@ -829,6 +829,8 @@
             "order": 1,
             "boat": 1,
             "days": 5,
+            "start_date": "2023-10-20",
+            "end_date": "2023-10-25",
             "price_per_day": "500.00",
             "price": "2500.00"
         }
@@ -840,6 +842,8 @@
             "order": 1,
             "boat": 2,
             "days": 5,
+            "start_date": "2023-10-20",
+            "end_date": "2023-10-25",
             "price_per_day": "100.00",
             "price": "500.00"
         }

@@ -26,11 +26,13 @@ class CustomUserManager(BaseUserManager):
 
 class User(AbstractUser):
     username = None
-    telephone = models.CharField(max_length=15, blank=True, null=True)
+    name = models.CharField(max_length=30)
+    surname = models.CharField(max_length=30)
+    telephone = models.CharField(max_length=15)
     email = models.EmailField(unique=True)
-    address = models.CharField(max_length=255, blank=True, null=True)
-    dni = models.CharField(max_length=10, blank=True, null=True)
-    birthdate = models.DateField(blank=True, null=True)
+    address = models.CharField(max_length=255)
+    dni = models.CharField(max_length=10)
+    birthdate = models.DateField()
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []

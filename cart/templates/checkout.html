@@ -39,7 +39,7 @@
     </div>
 
     <div class="text-center mt-4 mb-4">
-        <button class="btn btn-success">Confirmar pedidio</button>
+        <a href="{% url 'create_order' %}" class="btn btn-success">Confirmar pedido</a>
     </div>
 {% else %}
     <p class="text-center">Tu cesta está vacía.</p>

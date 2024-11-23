@@ -22,8 +22,10 @@ class UserRegisterForm(UserCreationForm):
     
     class Meta:
         model = User
-        fields = ['email', 'telephone', 'address', 'dni', 'birthdate', 'password1', 'password2']
+        fields = ['name', 'surname', 'email', 'telephone', 'address', 'dni', 'birthdate', 'password1', 'password2']
         labels = {
+            'name': 'Nombre',
+            'surname': 'Apellidos',
             'email': 'Correo electrónico',
             'telephone': 'Teléfono',
             'address': 'Dirección',
