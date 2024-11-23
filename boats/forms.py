@@ -21,6 +21,11 @@ class BoatTypeForm(forms.ModelForm):
     class Meta:
         model = BoatType
         fields = ['name', 'description']
+        labels = {
+            'bnane': 'Nombre',
+            'description': 'Descripción'
+        }
+
 
 
 class BoatModelForm(forms.ModelForm):
@@ -28,6 +33,13 @@ class BoatModelForm(forms.ModelForm):
     class Meta:
         model = BoatModel
         fields = ['boat_type', 'name', 'capacity', 'brand', 'image']
+        labels = {
+            'boat_type': 'Tipo de embarcación',
+            'name': 'Nombre',
+            'capacity': 'Capacidad',
+            'brand': 'Marca',
+            'image': 'Imagen',
+        }
 
 
 class PortForm(forms.ModelForm):
@@ -35,3 +47,7 @@ class PortForm(forms.ModelForm):
     class Meta:
         model = Port
         fields = ['name', 'address']
+        labels = {
+            'name': 'Nombre',
+            'address': 'Dirección',
+        }
