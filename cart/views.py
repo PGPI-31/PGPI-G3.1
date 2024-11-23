@@ -2,66 +2,56 @@
 
 from datetime import datetime
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
+
 from .models import BoatInstance, Cart, CartItem
 from django.contrib.auth.decorators import login_required
 
 @login_required
 def add_to_cart(request, boat_id):
+    cart, created = Cart.objects.get_or_create(user=request.user)
     boat_instance = get_object_or_404(BoatInstance, id=boat_id)
+
     start_date = request.POST.get('start_date')
     end_date = request.POST.get('end_date')
-    
-    if start_date and end_date:
-        # Convertir las fechas a objetos datetime.date
-        try:
-            start_date = datetime.strptime(start_date, '%Y-%m-%d').date()
-            end_date = datetime.strptime(end_date, '%Y-%m-%d').date()
-            
-            # Calcular número de días y precio total
-            number_of_days = (end_date - start_date).days
-            if number_of_days <= 0:
-                return render(request, 'error.html', {'message': 'La fecha de fin debe ser posterior a la fecha de inicio.'})
-            
-            total_price = boat_instance.price_per_day * number_of_days
-            
-            # Obtener o crear el carrito del usuario
-            cart, created = Cart.objects.get_or_create(
-                user_id=request.user.id,
-                defaults={
-                    'created_at': datetime.now(),
-                    'updated_at': datetime.now(),
-                    'start_date': start_date,
-                    'end_date': end_date
-                }
-            )
-            
-            # Si el carrito ya existe, actualizamos la fecha de actualización y la fecha de inicio y fin
-            if not created:
-                cart.updated_at = datetime.now()
-                cart.start_date = start_date
-                cart.end_date = end_date
-                cart.save()
 
-            # Verificar si el producto ya está en la cesta
-            existing_item = CartItem.objects.filter(cart_id=cart, boat_instance_id=boat_instance).first()
-            if existing_item:
-                # Si el producto ya está en la cesta, actualizamos los días y el precio total
-                existing_item.number_of_days = number_of_days
-                existing_item.price_per_day = boat_instance.price_per_day
-                existing_item.total_price = total_price
-                existing_item.save()
-            else:
-                # Crear un nuevo elemento en la cesta
-                CartItem.objects.create(
-                    cart_id=cart.id,
-                    boat_instance_id=boat_instance.id,
-                    number_of_days=number_of_days,
-                    price_per_day=boat_instance.price_per_day,
-                    total_price=total_price
-                )
-        except ValueError:
-            return render(request, 'error.html', {'message': 'Formato de fecha inválido.'})
+    if not start_date or not end_date:
+        messages.error(request, "Please provide both start and end dates.")
+        return redirect(request.META.get('HTTP_REFERER', 'index'))
     
+    # Calculate number of days
+    try:
+        start_date = datetime.strptime(start_date, '%Y-%m-%d').date()
+        end_date = datetime.strptime(end_date, '%Y-%m-%d').date()
+        number_of_days = (end_date - start_date).days
+        if number_of_days <= 0:
+            raise ValueError("Fecha de fin debe ser posterior a la de inicio.")
+    except ValueError as e:
+        messages.error(request, f"Fechas inválidas: {e}")
+        return redirect(request.META.get('HTTP_REFERER', 'index'))
+    
+    # Check if the item already exists in the cart for the same dates
+    existing_item = CartItem.objects.filter(
+        cart=cart,
+        boat_instance=boat_instance,
+        start_date=start_date,
+        end_date=end_date
+    ).first()
+
+    if existing_item:
+        messages.info(request, f"{boat_instance.name} ya está en tu cesta.")
+    else:
+        # Add the new item to the cart
+        CartItem.objects.create(
+            cart=cart,
+            boat_instance=boat_instance,
+            start_date=start_date,
+            end_date=end_date,
+            number_of_days=number_of_days,
+            price_per_day=boat_instance.price_per_day
+        )
+        messages.success(request, f"{boat_instance.name} ha sido añadido a tu cesta.")
+
     return redirect(request.META.get('HTTP_REFERER', 'index'))
 
 
@@ -69,7 +59,7 @@ def add_to_cart(request, boat_id):
 def remove_from_cart(request, item_id):
     cart_item = get_object_or_404(CartItem, id=item_id, cart_id__user_id=request.user.id)
     cart_item.delete()
-    return redirect('mostrar_cesta')
+    return redirect(request.META.get('HTTP_REFERER', 'index'))
 
 @login_required
 def checkout(request):
