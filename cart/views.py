@@ -83,4 +83,8 @@ def view_cart(request):
     return render(request, 'mostrar_cesta.html', {'cart_items': cart_items})
 
 
+def checkout(request):
+    cart = get_object_or_404(Cart, user=request.user)
+
+    return render(request, 'checkout.html', {'cart': cart})
 
