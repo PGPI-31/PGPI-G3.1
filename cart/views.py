@@ -64,11 +64,6 @@ def remove_from_cart(request, item_id):
     cart_item.delete()
     return redirect(request.META.get('HTTP_REFERER', 'index'))
 
-@login_required
-def checkout(request):
-    # Implementación de formalización del alquiler
-    return render(request, 'formalizacion.html')
-
 from django.shortcuts import render, get_object_or_404
 from .models import Cart, CartItem
 from django.contrib.auth.decorators import login_required
@@ -87,9 +82,8 @@ def view_cart(request):
 
 
 def checkout(request):
-    cart = get_object_or_404(Cart, user=request.user)
-
-    return render(request, 'checkout.html', {'cart': cart})
+   cart = get_or_create_cart(request)
+   return render(request, 'checkout.html', {'cart': cart})
 
 def add_to_cart_catalogue(request, model_id):
     if request.method == "POST":
@@ -127,7 +121,7 @@ def add_to_cart_catalogue(request, model_id):
             return redirect(request.META.get('HTTP_REFERER', 'index'))
 
         # Get or create the user's cart
-        cart, created = Cart.objects.get_or_create(user=request.user)
+        cart = get_or_create_cart(request)
 
         # Add the item to the cart
         number_of_days = (end_date - start_date).days
@@ -167,12 +161,20 @@ def parse_group_key(group_key):
         # If parsing fails, raise an HTTP 404 error
         raise Http404(f"Invalid group key format: {group_key}")
 
+def get_or_create_cart(request):
+    if request.user.is_authenticated:
+        # Retrieve or create a cart for the logged-in user
+        cart, created = Cart.objects.get_or_create(user=request.user)
+    else:
+        # Retrieve or create a cart for the anonymous session
+        if not request.session.session_key:
+            request.session.create()
+        session_key = request.session.session_key
+        cart, created = Cart.objects.get_or_create(session_key=session_key)
+    return cart
 
 def add_quantity(request, group_key):
-    if not request.user.is_authenticated:
-        return redirect('login')
-
-    cart = get_object_or_404(Cart, user=request.user)
+    cart = get_or_create_cart(request)
     try:
         model_id, port_id, start_date, end_date = parse_group_key(group_key)
     except Http404:
@@ -212,7 +214,7 @@ def add_quantity(request, group_key):
     return redirect(request.META.get('HTTP_REFERER', 'index'))
 
 def subtract_quantity(request, group_key):
-    cart = get_object_or_404(Cart, user=request.user)
+    cart = get_or_create_cart(request)
     try:
         model_id, port_id, start_date, end_date = parse_group_key(group_key)
     except Http404:
@@ -235,4 +237,20 @@ def subtract_quantity(request, group_key):
     # Remove the cart item
     cart_item.delete()
     return redirect(request.META.get('HTTP_REFERER', 'index'))
-    
+
+def merge_carts(sender, request, user, **kwargs):
+    session_cart = Cart.objects.filter(session_key=request.session.session_key).first()
+    user_cart = Cart.objects.filter(user=user).first()
+
+    if session_cart:
+        if not user_cart:
+            # Assign the session cart to the user
+            session_cart.user = user
+            session_cart.session_key = None
+            session_cart.save()
+        else:
+            # Merge items from session_cart into user_cart
+            for item in session_cart.items.all():
+                item.cart = user_cart
+                item.save()
+            session_cart.delete()

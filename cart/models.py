@@ -3,12 +3,15 @@ from authentication.models import User
 from boats.models import BoatInstance
 
 class Cart(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='carts')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='carts', null=True, blank=True)
+    session_key = models.CharField(max_length=40, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"Cart for {self.user}"
+        if self.user:
+            return f"Cart for {self.user}"
+        return f"Cart for session {self.session_key}"
     
     def get_total_price(self):
         return sum(item.total_price for item in self.items.all())
