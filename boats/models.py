@@ -6,7 +6,7 @@ class BoatType(models.Model):
     description = models.TextField()
 
     def __str__(self):
-        return self.nombre
+        return self.name
 
 
 class BoatModel(models.Model):
@@ -14,7 +14,7 @@ class BoatModel(models.Model):
     name = models.CharField(max_length=100)
     capacity = models.IntegerField()
     brand = models.CharField(max_length=100)
-    image = models.ImageField(upload_to='boat_images/', blank=True, null=True)
+    image = models.ImageField(upload_to='boat_images/', blank=False, null=False)
 
     def __str__(self):
         return self.name
