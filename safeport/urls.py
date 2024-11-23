@@ -30,9 +30,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('auth/', include('authentication.urls')),
     path('productos/', include('boats.urls')),
-    path('cesta/', include('cart.urls'))
-
-
+    path('cesta/', include('cart.urls')),
+    path('mail/',  include('mail.urls')  )
 ]
 urlpatterns += static(settings.STATIC_URL, document_root=os.path.join(settings.BASE_DIR, 'static'))
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
