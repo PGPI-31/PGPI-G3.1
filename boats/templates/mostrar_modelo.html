@@ -23,6 +23,7 @@
                 <p><strong>Tipo:</strong> {{ boat_model.boat_type.name }}</p>
                 <p><strong>Marca:</strong> {{ boat_model.brand }}</p>
                 <p><strong>Capacidad:</strong> {{ boat_model.capacity }} personas</p>
+                <p><strong>Fecha de salida:</strong> {{ boat_model.release_date|date:"d/m/Y" }}</p>
                 <p><strong>Precio por día:</strong> {{ boat_model.price_per_day }}</p>
             </div>
         </div>

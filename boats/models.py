@@ -12,6 +12,7 @@ class BoatType(models.Model):
 class BoatModel(models.Model):
     boat_type = models.ForeignKey(BoatType, on_delete=models.SET_NULL, related_name='models', null=True)
     name = models.CharField(max_length=100)
+    release_date = models.DateField()
     capacity = models.IntegerField()
     brand = models.CharField(max_length=100)
     price_per_day = models.DecimalField(max_digits=10, decimal_places=2)

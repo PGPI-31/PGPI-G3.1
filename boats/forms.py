@@ -35,6 +35,7 @@ class BoatModelForm(forms.ModelForm):
         fields = ['boat_type', 'name', 'capacity', 'brand', 'image', 'price_per_day']
         labels = {
             'boat_type': 'Tipo de embarcación',
+            'release_date': 'Fecha de lanzamiento',
             'name': 'Nombre',
             'capacity': 'Capacidad',
             'brand': 'Marca',
