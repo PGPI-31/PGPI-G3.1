@@ -757,8 +757,7 @@
         "model": "authentication.user",
         "pk": 1,
         "fields": {
-            "username": "testuser",
-            "email": "testuser@example.com",
+            "email": "user@test.com",
             "telephone": "123456789",
             "address": "456 Sample St",
             "dni": "A12345678",

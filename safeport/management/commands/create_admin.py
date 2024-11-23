@@ -6,14 +6,12 @@ class Command(BaseCommand):
     help = 'Create an admin user if not already created'
 
     def handle(self, *args, **kwargs):
-        username = 'admin'
         email = 'admin@example.com'
         password = 'pgpi1234'
 
         # Check if a superuser already exists
         if not User.objects.filter(is_superuser=True).exists():
             User.objects.create_superuser(
-                username=username,
                 email=email,
                 password=password,
                 telephone='1234567890',
