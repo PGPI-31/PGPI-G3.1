@@ -23,7 +23,7 @@ class CartItem(models.Model):
     total_price = models.DecimalField(max_digits=10, decimal_places=2)
 
     def save(self, *args, **kwargs):
-        self.total_price = self.number_of_days * self.price_per_day
+        self.total_price = self.number_of_days * self.boat_instance.model.price_per_day
         super().save(*args, **kwargs)
 
     def __str__(self):

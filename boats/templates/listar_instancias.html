@@ -9,7 +9,7 @@
     <div class="product-card">
         <img src="{{ producto.model.image.url }}" alt="Imagen de {{ producto.name }}" class="img-fluid">
         <h2>{{ producto.name }}</h2>
-        <p><strong>Precio por día:</strong> {{ producto.price_per_day }} €</p>
+        <p><strong>Precio por día:</strong> {{ producto.model.price_per_day }} €</p>
         <p>
             <strong>Disponibilidad:</strong>
             {% if producto.available %}

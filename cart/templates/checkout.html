@@ -7,7 +7,7 @@
 
 {% block content %}
 <div class="mb-4">
-    <a href="{% url 'listar_productos' %}" class="btn btn-outline-primary">
+    <a href="{% url 'ver_catalogo' %}" class="btn btn-outline-primary">
         &larr; Volver al catálogo
     </a>
 </div>
@@ -38,7 +38,7 @@
         <h4>Precio total: ${{ cart.get_total_price }}</h4>
     </div>
 
-    <div class="text-center mt-4">
+    <div class="text-center mt-4 mb-4">
         <button class="btn btn-success">Confirmar pedidio</button>
     </div>
 {% else %}

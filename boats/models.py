@@ -14,6 +14,7 @@ class BoatModel(models.Model):
     name = models.CharField(max_length=100)
     capacity = models.IntegerField()
     brand = models.CharField(max_length=100)
+    price_per_day = models.DecimalField(max_digits=10, decimal_places=2)
     image = models.ImageField(upload_to='boat_images/', blank=False, null=False)
 
     def __str__(self):
@@ -34,7 +35,6 @@ class BoatInstance(models.Model):
     port = models.ForeignKey(Port, on_delete=models.SET_NULL, related_name='instances', null=True)
     creation_date = models.DateField(auto_now_add=True)
     available = models.BooleanField(default=True)
-    price_per_day = models.DecimalField(max_digits=10, decimal_places=2)
 
     def __str__(self):
         return self.name

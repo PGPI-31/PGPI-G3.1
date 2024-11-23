@@ -55,7 +55,8 @@
             "name": "Crucero de Lujo",
             "capacity": 12,
             "brand": "Sunseeker",
-            "image": "boat_images/crucero_de_lujo.jpg"
+            "image": "boat_images/crucero_de_lujo.jpg",
+            "price_per_day": "2000.00"
         }
     },
     {
@@ -66,7 +67,8 @@
             "name": "Mega Yate Imperial",
             "capacity": 20,
             "brand": "Azimut",
-            "image": "boat_images/mega_yate_imperial.jpg"
+            "image": "boat_images/mega_yate_imperial.jpg",
+            "price_per_day": "4000.99"
         }
     },
     {
@@ -77,7 +79,8 @@
             "name": "Eclipse Explorer",
             "capacity": 15,
             "brand": "Ferretti",
-            "image": "boat_images/eclipse_explorer.jpg"
+            "image": "boat_images/eclipse_explorer.jpg",
+            "price_per_day": "3400.00"
         }
     },
     {
@@ -88,7 +91,8 @@
             "name": "Velero Regata",
             "capacity": 6,
             "brand": "Beneteau",
-            "image": "boat_images/velero_regata.jpg"
+            "image": "boat_images/velero_regata.jpg",
+            "price_per_day": "300.00"
         }
     },
     {
@@ -99,7 +103,8 @@
             "name": "Navegante de Altura",
             "capacity": 4,
             "brand": "Hanse",
-            "image": "boat_images/navegante_de_altura.jpg"
+            "image": "boat_images/navegante_de_altura.jpg",
+            "price_per_day": "450.00"
         }
     },
     {
@@ -110,7 +115,8 @@
             "name": "Brisa Marina",
             "capacity": 8,
             "brand": "Jeanneau",
-            "image": "boat_images/brisa_marina.jpg"
+            "image": "boat_images/brisa_marina.jpg",
+            "price_per_day": "200.00"
         }
     },
     {
@@ -121,7 +127,8 @@
             "name": "Relámpago Marino",
             "capacity": 5,
             "brand": "Bayliner",
-            "image": "boat_images/relampago_marino.jpg"
+            "image": "boat_images/relampago_marino.jpg",
+            "price_per_day": "600.00"
         }
     },
     {
@@ -132,7 +139,8 @@
             "name": "Flecha Azul",
             "capacity": 4,
             "brand": "Yamaha",
-            "image": "boat_images/flecha_azul.jpg"
+            "image": "boat_images/flecha_azul.jpg",
+            "price_per_day": "1060.00"
         }
     },
     {
@@ -143,7 +151,8 @@
             "name": "Tiburón Veloz",
             "capacity": 6,
             "brand": "Glastron",
-            "image": "boat_images/tiburon_veloz.jpg"
+            "image": "boat_images/tiburon_veloz.jpg",
+            "price_per_day": "280.00"
         }
     },
     {
@@ -154,7 +163,8 @@
             "name": "Catamarán Familiar",
             "capacity": 10,
             "brand": "Lagoon",
-            "image": "boat_images/catamaran_familiar.jpg"
+            "image": "boat_images/catamaran_familiar.jpg",
+            "price_per_day": "800.00"
         }
     },
     {
@@ -165,7 +175,8 @@
             "name": "Explorador Tropical",
             "capacity": 8,
             "brand": "Bali",
-            "image": "boat_images/explorador_tropical.jpg"
+            "image": "boat_images/explorador_tropical.jpg",
+            "price_per_day": "2500.00"
         }
     },
     {
@@ -176,7 +187,8 @@
             "name": "Isla Flotante",
             "capacity": 12,
             "brand": "Fountaine Pajot",
-            "image": "boat_images/isla_flotante.jpg"
+            "image": "boat_images/isla_flotante.jpg",
+            "price_per_day": "1700.00"
         }
     },
     {
@@ -187,7 +199,8 @@
             "name": "Pesquero Clásico",
             "capacity": 4,
             "brand": "Aluminum Boats",
-            "image": "boat_images/pesquero_clasico.jpg"
+            "image": "boat_images/pesquero_clasico.jpg",
+            "price_per_day": "600.00"
         }
     },
     {
@@ -198,7 +211,8 @@
             "name": "Rey del Mar",
             "capacity": 6,
             "brand": "Quicksilver",
-            "image": "boat_images/rey_del_mar.jpg"
+            "image": "boat_images/rey_del_mar.jpg",
+            "price_per_day": "130.00"
         }
     },
     {
@@ -209,7 +223,8 @@
             "name": "Pescador de Altura",
             "capacity": 8,
             "brand": "Lund",
-            "image": "boat_images/pescador_de_altura.jpg"
+            "image": "boat_images/pescador_de_altura.jpg",
+            "price_per_day": "200.00"
         }
     },
     {
@@ -220,7 +235,8 @@
             "name": "Góndola Tradicional",
             "capacity": 2,
             "brand": "Venetian Craft",
-            "image": "boat_images/gondola_tradicional.jpg"
+            "image": "boat_images/gondola_tradicional.jpg",
+            "price_per_day": "400.00"
         }
     },
     {
@@ -231,7 +247,8 @@
             "name": "Romántica Veneciana",
             "capacity": 2,
             "brand": "Canal Boats",
-            "image": "boat_images/romantica_veneciana.jpg"
+            "image": "boat_images/romantica_veneciana.jpg",
+            "price_per_day": "600.00"
         }
     },
     {
@@ -242,7 +259,8 @@
             "name": "Estrella del Canal",
             "capacity": 3,
             "brand": "Classic Venice",
-            "image": "boat_images/estrella_del_canal.jpg"
+            "image": "boat_images/estrella_del_canal.jpg",
+            "price_per_day": "410.00"
         }
     },
     {
@@ -290,11 +308,43 @@
         "pk": 1,
         "fields": {
             "model": 1,
-            "name": "Crucero de Lujo - A",
+            "name": "Crucero de Lujo - A1",
             "port": 1,
             "creation_date": "2018-04-15",
-            "available": true,
-            "price_per_day": "1500.00"
+            "available": true
+        }
+    },
+    {
+        "model": "boats.boatinstance",
+        "pk": 1,
+        "fields": {
+            "model": 1,
+            "name": "Crucero de Lujo - A2",
+            "port": 1,
+            "creation_date": "2018-04-15",
+            "available": true
+        }
+    },
+    {
+        "model": "boats.boatinstance",
+        "pk": 50,
+        "fields": {
+            "model": 1,
+            "name": "Crucero de Lujo - A3",
+            "port": 1,
+            "creation_date": "2018-04-15",
+            "available": true
+        }
+    },
+    {
+        "model": "boats.boatinstance",
+        "pk": 51,
+        "fields": {
+            "model": 1,
+            "name": "Crucero de Lujo - B1",
+            "port": 2,
+            "creation_date": "2019-06-20",
+            "available": false
         }
     },
     {
@@ -302,11 +352,21 @@
         "pk": 2,
         "fields": {
             "model": 1,
-            "name": "Crucero de Lujo - B",
+            "name": "Crucero de Lujo - B2",
             "port": 2,
             "creation_date": "2019-06-20",
-            "available": false,
-            "price_per_day": "1550.00"
+            "available": false
+        }
+    },
+    {
+        "model": "boats.boatinstance",
+        "pk": 53,
+        "fields": {
+            "model": 1,
+            "name": "Crucero de Lujo - B3",
+            "port": 2,
+            "creation_date": "2019-06-20",
+            "available": false
         }
     },
     {
@@ -317,8 +377,7 @@
             "name": "Crucero de Lujo - C",
             "port": 3,
             "creation_date": "2020-08-10",
-            "available": true,
-            "price_per_day": "1600.00"
+            "available": true
         }
     },
     {
@@ -326,11 +385,32 @@
         "pk": 4,
         "fields": {
             "model": 2,
-            "name": "Mega Yate Imperial - A",
-            "port": 2,
+            "name": "Mega Yate Imperial - A1",
+            "port": 1,
             "creation_date": "2017-11-05",
-            "available": true,
-            "price_per_day": "2000.00"
+            "available": true
+        }
+    },
+    {
+        "model": "boats.boatinstance",
+        "pk": 54,
+        "fields": {
+            "model": 2,
+            "name": "Mega Yate Imperial - A2",
+            "port": 1,
+            "creation_date": "2017-11-05",
+            "available": true
+        }
+    },
+    {
+        "model": "boats.boatinstance",
+        "pk": 55,
+        "fields": {
+            "model": 2,
+            "name": "Mega Yate Imperial - A3",
+            "port": 1,
+            "creation_date": "2017-11-05",
+            "available": true
         }
     },
     {
@@ -341,8 +421,7 @@
             "name": "Mega Yate Imperial - B",
             "port": 4,
             "creation_date": "2018-09-18",
-            "available": false,
-            "price_per_day": "2050.00"
+            "available": false
         }
     },
     {
@@ -353,8 +432,7 @@
             "name": "Mega Yate Imperial - C",
             "port": 5,
             "creation_date": "2019-12-25",
-            "available": true,
-            "price_per_day": "2100.00"
+            "available": true
         }
     },
     {
@@ -365,8 +443,7 @@
             "name": "Eclipse Explorer - A",
             "port": 1,
             "creation_date": "2018-03-22",
-            "available": true,
-            "price_per_day": "1700.00"
+            "available": true
         }
     },
     {
@@ -377,8 +454,7 @@
             "name": "Eclipse Explorer - B",
             "port": 3,
             "creation_date": "2019-05-30",
-            "available": false,
-            "price_per_day": "1750.00"
+            "available": false
         }
     },
     {
@@ -389,8 +465,7 @@
             "name": "Eclipse Explorer - C",
             "port": 4,
             "creation_date": "2020-07-12",
-            "available": true,
-            "price_per_day": "1800.00"
+            "available": true
         }
     },
     {
@@ -401,8 +476,7 @@
             "name": "Velero Regata - A",
             "port": 2,
             "creation_date": "2017-07-12",
-            "available": true,
-            "price_per_day": "400.00"
+            "available": true
         }
     },
     {
@@ -413,8 +487,7 @@
             "name": "Velero Regata - B",
             "port": 4,
             "creation_date": "2018-08-23",
-            "available": true,
-            "price_per_day": "420.00"
+            "available": true
         }
     },
     {
@@ -425,8 +498,7 @@
             "name": "Navegante de Altura - A",
             "port": 3,
             "creation_date": "2016-05-15",
-            "available": true,
-            "price_per_day": "380.00"
+            "available": true
         }
     },
     {
@@ -437,8 +509,7 @@
             "name": "Navegante de Altura - B",
             "port": 5,
             "creation_date": "2017-06-18",
-            "available": false,
-            "price_per_day": "390.00"
+            "available": false
         }
     },
     {
@@ -449,8 +520,7 @@
             "name": "Brisa Marina - A",
             "port": 1,
             "creation_date": "2018-09-20",
-            "available": true,
-            "price_per_day": "450.00"
+            "available": true
         }
     },
     {
@@ -461,8 +531,7 @@
             "name": "Brisa Marina - B",
             "port": 2,
             "creation_date": "2019-11-25",
-            "available": true,
-            "price_per_day": "460.00"
+            "available": true
         }
     },
     {
@@ -473,8 +542,7 @@
             "name": "Relámpago Marino - A",
             "port": 3,
             "creation_date": "2018-01-10",
-            "available": true,
-            "price_per_day": "600.00"
+            "available": true
         }
     },
     {
@@ -485,8 +553,7 @@
             "name": "Relámpago Marino - B",
             "port": 4,
             "creation_date": "2019-03-15",
-            "available": false,
-            "price_per_day": "620.00"
+            "available": false
         }
     },
     {
@@ -497,8 +564,7 @@
             "name": "Flecha Azul - A",
             "port": 5,
             "creation_date": "2017-05-22",
-            "available": true,
-            "price_per_day": "580.00"
+            "available": true
         }
     },
     {
@@ -509,8 +575,7 @@
             "name": "Flecha Azul - B",
             "port": 1,
             "creation_date": "2018-07-30",
-            "available": true,
-            "price_per_day": "590.00"
+            "available": true
         }
     },
     {
@@ -521,8 +586,7 @@
             "name": "Tiburón Veloz - A",
             "port": 2,
             "creation_date": "2019-02-18",
-            "available": true,
-            "price_per_day": "610.00"
+            "available": true
         }
     },
     {
@@ -533,8 +597,7 @@
             "name": "Tiburón Veloz - B",
             "port": 3,
             "creation_date": "2020-04-25",
-            "available": false,
-            "price_per_day": "630.00"
+            "available": false
         }
     },
     {
@@ -545,8 +608,7 @@
             "name": "Catamarán Familiar - A",
             "port": 4,
             "creation_date": "2016-06-14",
-            "available": true,
-            "price_per_day": "800.00"
+            "available": true
         }
     },
     {
@@ -557,8 +619,7 @@
             "name": "Catamarán Familiar - B",
             "port": 5,
             "creation_date": "2017-08-19",
-            "available": true,
-            "price_per_day": "820.00"
+            "available": true
         }
     },
     {
@@ -569,8 +630,7 @@
             "name": "Explorador Tropical - A",
             "port": 1,
             "creation_date": "2018-10-27",
-            "available": false,
-            "price_per_day": "850.00"
+            "available": false
         }
     },
     {
@@ -581,8 +641,7 @@
             "name": "Explorador Tropical - B",
             "port": 2,
             "creation_date": "2019-12-05",
-            "available": true,
-            "price_per_day": "870.00"
+            "available": true
         }
     },
     {
@@ -593,8 +652,7 @@
             "name": "Isla Flotante - A",
             "port": 3,
             "creation_date": "2020-01-15",
-            "available": true,
-            "price_per_day": "900.00"
+            "available": true
         }
     },
     {
@@ -605,8 +663,7 @@
             "name": "Isla Flotante - B",
             "port": 4,
             "creation_date": "2021-03-22",
-            "available": false,
-            "price_per_day": "920.00"
+            "available": false
         }
     },
     {
@@ -617,8 +674,7 @@
             "name": "Pesquero Clásico - A",
             "port": 5,
             "creation_date": "2016-02-11",
-            "available": true,
-            "price_per_day": "300.00"
+            "available": true
         }
     },
     {
@@ -629,8 +685,7 @@
             "name": "Pesquero Clásico - B",
             "port": 1,
             "creation_date": "2017-04-18",
-            "available": true,
-            "price_per_day": "320.00"
+            "available": true
         }
     },
     {
@@ -641,8 +696,7 @@
             "name": "Rey del Mar - A",
             "port": 2,
             "creation_date": "2018-06-25",
-            "available": false,
-            "price_per_day": "350.00"
+            "available": false
         }
     },
     {
@@ -653,8 +707,7 @@
             "name": "Rey del Mar - B",
             "port": 3,
             "creation_date": "2019-08-30",
-            "available": true,
-            "price_per_day": "370.00"
+            "available": true
         }
     },
     {
@@ -665,8 +718,7 @@
             "name": "Pescador de Altura - A",
             "port": 4,
             "creation_date": "2020-11-12",
-            "available": true,
-            "price_per_day": "400.00"
+            "available": true
         }
     },
     {
@@ -677,8 +729,7 @@
             "name": "Pescador de Altura - B",
             "port": 5,
             "creation_date": "2021-01-18",
-            "available": false,
-            "price_per_day": "420.00"
+            "available": false
         }
     },
     {
@@ -689,8 +740,7 @@
             "name": "Góndola Tradicional - A",
             "port": 1,
             "creation_date": "2015-05-05",
-            "available": true,
-            "price_per_day": "200.00"
+            "available": true
         }
     },
     {
@@ -701,8 +751,7 @@
             "name": "Góndola Tradicional - B",
             "port": 2,
             "creation_date": "2016-07-15",
-            "available": true,
-            "price_per_day": "210.00"
+            "available": true
         }
     },
     {
@@ -713,8 +762,7 @@
             "name": "Romántica Veneciana - A",
             "port": 3,
             "creation_date": "2017-09-22",
-            "available": false,
-            "price_per_day": "220.00"
+            "available": false
         }
     },
     {
@@ -725,8 +773,7 @@
             "name": "Romántica Veneciana - B",
             "port": 4,
             "creation_date": "2018-11-30",
-            "available": true,
-            "price_per_day": "230.00"
+            "available": true
         }
     },
     {
@@ -737,8 +784,7 @@
             "name": "Estrella del Canal - A",
             "port": 5,
             "creation_date": "2019-02-10",
-            "available": true,
-            "price_per_day": "240.00"
+            "available": true
         }
     },
     {
@@ -749,8 +795,7 @@
             "name": "Estrella del Canal - B",
             "port": 1,
             "creation_date": "2020-04-18",
-            "available": false,
-            "price_per_day": "250.00"
+            "available": false
         }
     },
     {

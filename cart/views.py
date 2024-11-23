@@ -1,6 +1,7 @@
 # Create your views here.
 
 from datetime import datetime
+from django.http import Http404
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 
@@ -50,7 +51,7 @@ def add_to_cart(request, boat_id):
             start_date=start_date,
             end_date=end_date,
             number_of_days=number_of_days,
-            price_per_day=boat_instance.price_per_day
+            price_per_day=boat_instance.boat__model.price_per_day
         )
         messages.success(request, f"{boat_instance.name} ha sido añadido a tu cesta.")
 
@@ -136,7 +137,7 @@ def add_to_cart_catalogue(request, model_id):
             start_date=start_date,
             end_date=end_date,
             number_of_days=number_of_days,
-            price_per_day=available_instance.price_per_day,
+            price_per_day=available_instance.model.price_per_day,
         )
 
         messages.success(request, f"{boat_model.name} ha sido añadido a tu cesta.")
@@ -144,3 +145,94 @@ def add_to_cart_catalogue(request, model_id):
 
     # If the request is not POST, redirect to catalogue
     return redirect('catalogue')
+
+def parse_group_key(group_key):
+    try:
+        # Split the string using the new delimiter
+        parts = group_key.split('_')
+
+        # Ensure the group_key contains exactly 4 parts
+        if len(parts) != 4:
+            raise ValueError("Group key does not have exactly 4 parts.")
+
+        # Extract components and convert them to their respective data types
+        model_id = int(parts[0])
+        port_id = int(parts[1])
+        start_date = datetime.strptime(parts[2], '%Y-%m-%d').date()
+        end_date = datetime.strptime(parts[3], '%Y-%m-%d').date()
+
+        return model_id, port_id, start_date, end_date
+
+    except (ValueError, TypeError):
+        # If parsing fails, raise an HTTP 404 error
+        raise Http404(f"Invalid group key format: {group_key}")
+
+
+def add_quantity(request, group_key):
+    if not request.user.is_authenticated:
+        return redirect('login')
+
+    cart = get_object_or_404(Cart, user=request.user)
+    try:
+        model_id, port_id, start_date, end_date = parse_group_key(group_key)
+    except Http404:
+        messages.error(request, "Invalid group key format.")
+        return redirect(request.META.get('HTTP_REFERER', 'index'))
+
+    # Get the related objects
+    boat_model = get_object_or_404(BoatModel, id=model_id)
+    port = get_object_or_404(Port, id=port_id)
+
+    # Check for available instance
+    available_instance = BoatInstance.objects.filter(
+        model=boat_model,
+        port=port,
+        available=True
+    ).exclude(
+        cartitem__start_date__lt=end_date,
+        cartitem__end_date__gt=start_date
+    ).first()
+
+    if not available_instance:
+        messages.error(request, f"No hay más instancias de {boat_model.name} en {port.name} en la fecha seleccionada.")
+        return redirect(request.META.get('HTTP_REFERER', 'index'))
+    
+    # Add new item
+    number_of_days = (end_date - start_date).days
+    CartItem.objects.create(
+        cart=cart,
+        boat_instance=available_instance,
+        start_date=start_date,
+        end_date=end_date,
+        number_of_days=number_of_days,
+        price_per_day=boat_model.price_per_day,
+    )
+
+    messages.success(request, f"Se ha añadido otro {boat_model.name} a tu cesta.")
+    return redirect(request.META.get('HTTP_REFERER', 'index'))
+
+def subtract_quantity(request, group_key):
+    cart = get_object_or_404(Cart, user=request.user)
+    try:
+        model_id, port_id, start_date, end_date = parse_group_key(group_key)
+    except Http404:
+        messages.error(request, "Invalid group key format.")
+        return redirect(request.META.get('HTTP_REFERER', 'index'))
+
+    # Find a cart item for the group
+    cart_item = CartItem.objects.filter(
+        cart=cart,
+        boat_instance__model_id=model_id,
+        boat_instance__port_id=port_id,
+        start_date=start_date,
+        end_date=end_date
+    ).first()
+
+    if not cart_item:
+        messages.error(request, f"No hay elementos a eliminar")
+        return redirect(request.META.get('HTTP_REFERER', 'index'))
+
+    # Remove the cart item
+    cart_item.delete()
+    return redirect(request.META.get('HTTP_REFERER', 'index'))
+    
