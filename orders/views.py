@@ -106,7 +106,7 @@ def collect_client_data(request):
 
     return render(request, 'collect_client_data.html', {'form': form})
 
-def select_paymnet_method(request):
+def select_payment_method(request):
     """
     El usuario selecciona si pagará en el sitio o en línea.
     """

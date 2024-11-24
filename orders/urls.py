@@ -5,7 +5,7 @@ from . import views
 urlpatterns = [
     path('create-order/', views.create_order, name='create_order'),
     path('client-data/', views.collect_client_data, name='collect_client_data'),
-    path('payment-method/', views.select_paymnet_method, name='select_payment_method'),
+    path('payment-method/', views.select_payment_method, name='select_payment_method'),
     path('order-complete/', views.order_complete, name='order_complete'),
 
     # Stripe
