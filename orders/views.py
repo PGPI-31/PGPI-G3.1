@@ -1,8 +1,8 @@
 from django.shortcuts import get_object_or_404, redirect, render
 
 from cart.models import Cart
-from orders.forms import ClientDataForm
-from orders.models import Order, OrderBoat, Cliente
+from orders.forms import ClientDataForm, PaymentMethodForm
+from orders.models import Order, OrderBoat, Cliente, Pago
 
 
 def create_order(request):
@@ -74,7 +74,7 @@ def collect_client_data(request):
                     'birthdate': request.user.birthdate,
                 }
             )
-            return redirect('collect_delivery_data')
+            return redirect('select_payment_method')
     else:
         order_id = request.session.get('order_id')
         order = get_object_or_404(Order, id=order_id, user=None)
@@ -94,11 +94,78 @@ def collect_client_data(request):
                 dni=form.cleaned_data['dni'],
                 birthdate=form.cleaned_data['birthdate'],
             )
-            return redirect('collect_delivery_data')
+            return redirect('select_payment_method')
     else:
         form = ClientDataForm()
 
     return render(request, 'collect_client_data.html', {'form': form})
 
-def collect_delivery_data(request):
-    return render(request, 'collect_delivery_data.html')
+def select_paymnet_method(request):
+    """
+    El usuario selecciona si pagará en el sitio o en línea.
+    """
+    if request.user.is_authenticated:
+        order = Order.objects.filter(user=request.user, status='pending').first()
+    else:
+        order_id = request.session.get('order_id')
+        order = get_object_or_404(Order, id=order_id, user=None)
+
+    if request.method == 'POST':
+        form = PaymentMethodForm(request.POST)
+        if form.is_valid():
+            payment_method = form.cleaned_data['method']
+
+            # Create or update the payment record
+            payment, created = Pago.objects.get_or_create(order=order)
+            payment.method = payment_method
+
+            if payment_method == 'on_site':
+                payment.payment_address = None
+                payment.account_number = None
+                payment.save()
+                order.status = 'pending_payment'
+                order.save()
+                return redirect('order_complete')
+            elif payment_method == 'online':
+                payment.save()
+                return redirect('online_payment')
+    else:
+        form = PaymentMethodForm()
+
+    return render(request, 'select_payment_method.html', {'form': form, 'order': order})
+
+
+def online_payment(request):
+    """
+    Simula el proceso de pago en línea.
+    """
+    if request.user.is_authenticated:
+        order = Order.objects.filter(user=request.user, status='pending_payment').first()
+    else:
+        order_id = request.session.get('order_id')
+        order = get_object_or_404(Order, id=order_id, user=None)
+
+    return render(request, 'online_payment.html', {'order': order})
+
+
+def order_complete(request):
+    """
+    Muestra la pantalla final del pedido
+    """
+    if request.user.is_authenticated:
+        order = Order.objects.filter(user=request.user, status='pending_payment').first()
+    else:
+        order_id = request.session.get('order_id')
+        order = get_object_or_404(Order, id=order_id, user=None)
+
+    payment = order.payments.first()
+    client = Cliente.objects.filter(order=order).first()
+    items = order.order_boats.select_related('boat')
+
+    context = {
+        'order': order,
+        'payment': payment,
+        'client': client,
+        'items': items,
+    }
+    return render(request, 'order_complete.html', context)

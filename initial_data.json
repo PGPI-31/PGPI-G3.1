@@ -872,7 +872,7 @@
         "fields": {
             "order": 1,
             "payment_address": "456 Sample St",
-            "method": "card",
+            "method": "online",
             "account_number": "1234567890"
         }
     }

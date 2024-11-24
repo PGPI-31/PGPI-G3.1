@@ -24,10 +24,14 @@ class OrderBoat(models.Model):
         return f"Boat {self.boat} in Order {self.order}"
 
 class Pago(models.Model):
+    PAYMENT_METHOD_CHOICES = [
+        ('on_site', 'Pagar en sitio'),
+        ('online', 'Pagar en línea'),
+    ]
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='payments')
-    payment_address = models.CharField(max_length=255)
-    method = models.CharField(max_length=50)
-    account_number = models.CharField(max_length=50)
+    payment_address = models.CharField(max_length=255, null=True, blank=True)
+    method = models.CharField(max_length=50, choices=PAYMENT_METHOD_CHOICES)
+    account_number = models.CharField(max_length=50, null=True, blank=True)
 
     def __str__(self):
         return f"{self.method} - {self.account_number}"
