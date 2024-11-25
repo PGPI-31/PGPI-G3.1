@@ -4,6 +4,10 @@ from .forms import BoatInstanceForm, BoatTypeForm, BoatModelForm, PortForm
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden
 
+def ver_catalogo(request):
+    modelos = BoatModel.objects.all()
+    ports = Port.objects.all()
+    return render(request, 'catalogo.html', {'modelos': modelos, 'ports': ports})
 
 def listar_modelos(request):
     modelos = BoatModel.objects.all()
@@ -17,12 +21,12 @@ def listar_productos(request):
 
 def listar_tipos(request):
     tipos = BoatType.objects.all()
-    return render(request, 'listar_tipos.html', {'tipos':tipos})
+    return render(request, 'admin/listar_tipos.html', {'tipos':tipos})
 
 
 def listar_puertos(request):
     puertos = Port.objects.all()
-    return render(request, 'listar_puertos.html', {'puertos': puertos})
+    return render(request, 'admin/listar_puertos.html', {'puertos': puertos})
 
 
 @login_required
@@ -37,7 +41,7 @@ def create_boat_instance(request):
     else:
         form = BoatInstanceForm()
 
-    return render(request, 'create_boat_instance.html', {'form': form})
+    return render(request, 'admin/create_boat_instance.html', {'form': form})
 
 
 @login_required
@@ -52,7 +56,7 @@ def create_boat_type(request):
     else:
         form = BoatTypeForm()
 
-    return render(request, 'create_boat_type.html', {'form': form})
+    return render(request, 'admin/create_boat_type.html', {'form': form})
 
 
 @login_required
@@ -67,7 +71,7 @@ def create_boat_model(request):
     else:
         form = BoatModelForm()
 
-    return render(request, 'create_boat_model.html', {'form': form})
+    return render(request, 'admin/create_boat_model.html', {'form': form})
 
 
 @login_required
@@ -82,7 +86,7 @@ def create_port(request):
     else:
         form = PortForm()
 
-    return render(request, 'create_port.html', {'form': form})
+    return render(request, 'admin/create_port.html', {'form': form})
 
 
 def mostrar_modelo(request, model_id):

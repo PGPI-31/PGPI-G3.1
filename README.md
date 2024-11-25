@@ -14,6 +14,8 @@ Proyecto desplegado: `https://safeport.onrender.com`
     - [5. Metodología para realizar cambios](#5-metodología-para-realizar-cambios)
     - [6. Recarga de BBDD](#6-recarga-de-bbdd)
     - [7. Docker](#7-docker)
+    - [8. Integración con Stripe](#8-integración-con-stripe)
+      - [8.1 Stripe para el entorno de desarrollo](#81-stripe-para-el-entorno-de-desarrollo)
 
 
 ---
@@ -108,3 +110,16 @@ Desde cmd en root en vscode:
 Accesible en:
 
 `http://localhost:8000/`
+
+### 8. Integración con Stripe
+
+Para el funcionamiento de los pagos en línea, hacen falta las credenciales de Stripe. Estas varían según el entorno de
+desarrollo o el de despliegue.
+
+#### 8.1 Stripe para el entorno de desarrollo
+
+Será necesario crearse una cuenta en Stripe `https://stripe.com`. Al registrarse se creará una cuenta de prueba. Esta tendrá todas las funcionalidades para poder probar el correcto funcionamiento de la pasarela de pago, dejango a manos del cliente el que configure su propia página en Stripe con la imagen dada; instrucciones que se detallarán en el siguiente punto.
+
+Desde el dashboard, en Developers -> API Keys, se pueden obtener dos de las claves necesarias. Estas se deben incluir en el env de configuración en el entorno de desarrollo como `STRIPE_SECRET_KEY` y `STRIPE_PUBLISHABLE_KEY`.
+
+Para que el servicio pueda responder a las peticiones del proyecto, deberá escuchar al webhook de la aplicación local. Primero se debe descargar la herramienta CLI de Stripe, desde `https://github.com/stripe/stripe-cli/releases/tag/v1.22.0`, descargando el `stripe_1.22.0_windows_x86_64.zip`. Este se debe descomprimir en una carpeta del ordenador. Una vez hecho, se debe añadir al PATH del sistema: En variables del sistema, seleccionando la de Path, se añade la ruta al .exe descomprimido. Lo siguiente es abrir una consola y colocarse en la carpeta descomprimida. Escribiendo `stripe.exe` se ejecutará. A continuación se debe escribir el comando `stripe login`. Esto abrirá un navegador para iniciar sesión con la cuenta de stripe. Por último, con el comando `stripe listen --foward-to http://localhost:8000/pedidos/webhook/` establecerá la conexión que necesitamos. Esto devolverá un token para el webhook que se debe poner en el env como `STRIPE_WEBHOOK_SECRET`.

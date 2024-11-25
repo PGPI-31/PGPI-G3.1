@@ -1,0 +1,183 @@
+{% extends "cesta.html" %}
+
+{% block title %}Inicio{% endblock %}
+
+{% block productos %}
+<h1>Inicio</h1>
+
+<!-- Most Rented Boats Section -->
+<section class="mb-5">
+    <h2 class="mb-4">Barcos Más Alquilados</h2>
+    <div class="product-grid">
+        {% for modelo in most_rented_boats %}
+        <div class="product-card">
+            <a href="{% url 'mostrar_modelo' modelo.id %}" class="text-decoration-none">
+                <img src="{{ modelo.image.url }}" alt="Imagen de {{ modelo.name }}" class="img-fluid">
+                <h2>{{ modelo.name }}</h2>
+                <p><strong>Tipo:</strong> {{ modelo.boat_type.name }}</p>
+                <p><strong>Capacidad:</strong> {{ modelo.capacity }}</p>
+                <p><strong>Marca:</strong> {{ modelo.brand }}</p>
+            </a>
+            <!-- Trigger Modal Button -->
+            <button class="btn btn-primary w-100 mt-2" data-bs-toggle="modal" data-bs-target="#modal-{{ modelo.id }}">
+                Alquilar
+            </button>
+        </div>
+        <!-- Modal for Each Boat -->
+        <div class="modal fade" id="modal-{{ modelo.id }}" tabindex="-1" aria-labelledby="modalLabel-{{ modelo.id }}" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalLabel-{{ modelo.id }}">Seleccionar fechas para {{ modelo.name }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form method="post" action="{% url 'adicion_cesta_catalogo' modelo.id %}">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <label for="start_date-{{ modelo.id }}" class="form-label">Fecha de inicio</label>
+                                <input type="date" id="start_date-{{ modelo.id }}" name="start_date" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="end_date-{{ modelo.id }}" class="form-label">Fecha de fin</label>
+                                <input type="date" id="end_date-{{ modelo.id }}" name="end_date" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="dock-{{ modelo.id }}" class="form-label">Seleccionar puerto</label>
+                                <select id="dock-{{ modelo.id }}" name="dock" class="form-select" required>
+                                    {% for port in ports %}
+                                    <option value="{{ port.id }}">{{ port.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-success w-100">Añadir al carrito</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        {% if not most_rented_boats %}
+        <p>No hay barcos alquilados.</p>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Most Affordable Boats Section -->
+<section class="mb-5">
+    <h2 class="mb-4">Barcos Más Económicos</h2>
+    <div class="product-grid">
+        {% for modelo in most_affordable_boats %}
+        <div class="product-card">
+            <a href="{% url 'mostrar_modelo' modelo.id %}" class="text-decoration-none">
+                <img src="{{ modelo.image.url }}" alt="Imagen de {{ modelo.name }}" class="img-fluid">
+                <h2>{{ modelo.name }}</h2>
+                <p><strong>Tipo:</strong> {{ modelo.boat_type.name }}</p>
+                <p><strong>Capacidad:</strong> {{ modelo.capacity }}</p>
+                <p><strong>Marca:</strong> {{ modelo.brand }}</p>
+                <p><strong>Precio por día:</strong> {{ modelo.price_per_day }} €</p>
+            </a>
+        <!-- Trigger Modal Button -->
+        <button class="btn btn-primary w-100 mt-2" data-bs-toggle="modal" data-bs-target="#modal-{{ modelo.id }}">
+            Alquilar
+        </button>
+        </div>
+        <!-- Modal for Each Boat -->
+        <div class="modal fade" id="modal-{{ modelo.id }}" tabindex="-1" aria-labelledby="modalLabel-{{ modelo.id }}" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalLabel-{{ modelo.id }}">Seleccionar fechas para {{ modelo.name }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form method="post" action="{% url 'adicion_cesta_catalogo' modelo.id %}">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <label for="start_date-{{ modelo.id }}" class="form-label">Fecha de inicio</label>
+                                <input type="date" id="start_date-{{ modelo.id }}" name="start_date" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="end_date-{{ modelo.id }}" class="form-label">Fecha de fin</label>
+                                <input type="date" id="end_date-{{ modelo.id }}" name="end_date" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="dock-{{ modelo.id }}" class="form-label">Seleccionar puerto</label>
+                                <select id="dock-{{ modelo.id }}" name="dock" class="form-select" required>
+                                    {% for port in ports %}
+                                    <option value="{{ port.id }}">{{ port.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-success w-100">Añadir al carrito</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        {% if not most_affordable_boats %}
+        <p>No hay barcos económicos disponibles.</p>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Most Recent Boats Section -->
+<section class="mb-5">
+    <h2 class="mb-4">Nuevos Barcos</h2>
+    <div class="product-grid">
+        {% for modelo in most_recent_boats %}
+        <div class="product-card">
+            <a href="{% url 'mostrar_modelo' modelo.id %}" class="text-decoration-none">
+                <img src="{{ modelo.image.url }}" alt="Imagen de {{ modelo.name }}" class="img-fluid">
+                <h2>{{ modelo.name }}</h2>
+                <p><strong>Tipo:</strong> {{ modelo.boat_type.name }}</p>
+                <p><strong>Capacidad:</strong> {{ modelo.capacity }}</p>
+                <p><strong>Marca:</strong> {{ modelo.brand }}</p>
+                <p><strong>Fecha de salida: </strong>{{ modelo.release_date|date:"d/m/Y" }}</p>
+            </a>
+         <!-- Trigger Modal Button -->
+            <button class="btn btn-primary w-100 mt-2" data-bs-toggle="modal" data-bs-target="#modal-{{ modelo.id }}">
+                Alquilar
+            </button>
+        </div>
+        <!-- Modal for Each Boat -->
+        <div class="modal fade" id="modal-{{ modelo.id }}" tabindex="-1" aria-labelledby="modalLabel-{{ modelo.id }}" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalLabel-{{ modelo.id }}">Seleccionar fechas para {{ modelo.name }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form method="post" action="{% url 'adicion_cesta_catalogo' modelo.id %}">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <label for="start_date-{{ modelo.id }}" class="form-label">Fecha de inicio</label>
+                                <input type="date" id="start_date-{{ modelo.id }}" name="start_date" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="end_date-{{ modelo.id }}" class="form-label">Fecha de fin</label>
+                                <input type="date" id="end_date-{{ modelo.id }}" name="end_date" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="dock-{{ modelo.id }}" class="form-label">Seleccionar puerto</label>
+                                <select id="dock-{{ modelo.id }}" name="dock" class="form-select" required>
+                                    {% for port in ports %}
+                                    <option value="{{ port.id }}">{{ port.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-success w-100">Añadir al carrito</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        {% if not most_recent_boats %}
+        <p>No hay barcos recientes.</p>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

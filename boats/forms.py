@@ -6,7 +6,7 @@ class BoatInstanceForm(forms.ModelForm):
 
     class Meta:
         model = BoatInstance
-        fields = ['model', 'name', 'port', 'available', 'price_per_day']
+        fields = ['model', 'name', 'port', 'available']
         labels = {
             'model': 'Modelo',
             'name': 'Nombre',
@@ -32,9 +32,10 @@ class BoatModelForm(forms.ModelForm):
     
     class Meta:
         model = BoatModel
-        fields = ['boat_type', 'name', 'capacity', 'brand', 'image']
+        fields = ['boat_type', 'name', 'capacity', 'brand', 'image', 'price_per_day']
         labels = {
             'boat_type': 'Tipo de embarcación',
+            'release_date': 'Fecha de lanzamiento',
             'name': 'Nombre',
             'capacity': 'Capacidad',
             'brand': 'Marca',
