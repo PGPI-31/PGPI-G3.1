@@ -1,0 +1,40 @@
+#shopping-cart {
+    height: 100vh; /* Make the cart column span the full height of the viewport */
+    overflow-y: auto; /* Enable scrolling if the cart content overflows */
+}
+
+.list-group-item {
+    font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+    #shopping-cart {
+        display: none; /* Hide the cart on smaller screens if needed */
+    }
+}
+
+.btn-eliminar-elemento-cesta {
+    padding: 0.25rem 0.5rem;
+    margin-left: 0.25rem;
+    font-size: 0.8rem;
+    background-color: rgb(209, 11, 51);
+}
+
+.btn-eliminar-elemento-cesta:hover {
+    background-color: rgb(235, 10, 55);
+}
+
+#cesta {
+    padding: 1rem;
+    height: 100vh;
+    overflow-y: auto;
+}
+
+#cesta p {
+    margin: 0.5rem 0;
+}
+
+#cesta .mb-4 {
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #ddd;
+}

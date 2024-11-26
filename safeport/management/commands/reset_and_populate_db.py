@@ -43,3 +43,7 @@ class Command(BaseCommand):
         self.stdout.write(self.style.WARNING("Loading fixture data..."))
         call_command('loaddata', 'initial_data.json') 
         self.stdout.write(self.style.SUCCESS("Fixture data loaded successfully."))
+
+        # Create superuser
+        self.stdout.write(self.style.WARNING("Creating admin user..."))
+        call_command('create_admin') 

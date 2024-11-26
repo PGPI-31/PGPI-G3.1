@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Tu Cesta</h2>
+{% if cart_items %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Barco</th>
+                <th>Puerto</th>
+                <th>Días</th>
+                <th>Precio por día</th>
+                <th>Precio total</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in cart_items %}
+            <tr>
+                <td>{{ item.boat_instance.name }}</td>
+                <td>{{ item.boat_instance.port.name }}</td>
+                <td>{{ item.number_of_days }}</td>
+                <td>${{ item.price_per_day }}</td>
+                <td>${{ item.total_price }}</td>
+                <td>
+                    <form method="post" action="{% url 'remove_from_cart' item.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="text-end">
+        <form method="post" action="{% url 'checkout' %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-success">Formalizar Alquiler</button>
+        </form>
+    </div>
+{% else %}
+    <p>Tu cesta está vacía.</p>
+{% endif %}
+{% endblock %}

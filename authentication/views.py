@@ -3,8 +3,10 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.urls import reverse_lazy
+from django.contrib.auth.signals import user_logged_in
 
 from authentication.forms import UserLoginForm, UserRegisterForm
+from cart.views import merge_carts
 
 def user_register(request):
     if request.method == 'POST':
@@ -25,6 +27,7 @@ def user_login(request):
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
+                user_logged_in.connect(merge_carts)
                 return redirect('home')
     else:
         form = UserLoginForm()

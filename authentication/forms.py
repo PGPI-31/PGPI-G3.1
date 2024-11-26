@@ -22,9 +22,10 @@ class UserRegisterForm(UserCreationForm):
     
     class Meta:
         model = User
-        fields = ['username', 'email', 'telephone', 'address', 'dni', 'birthdate', 'password1', 'password2']
+        fields = ['name', 'surname', 'email', 'telephone', 'address', 'dni', 'birthdate', 'password1', 'password2']
         labels = {
-            'username': 'Nombre de usuario',
+            'name': 'Nombre',
+            'surname': 'Apellidos',
             'email': 'Correo electrónico',
             'telephone': 'Teléfono',
             'address': 'Dirección',
@@ -35,5 +36,5 @@ class UserRegisterForm(UserCreationForm):
 class UserLoginForm(AuthenticationForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['username'].label = "Nombre de usuario"
+        self.fields['username'].label = "Correo electrónico"
         self.fields['password'].label = "Contraseña"
