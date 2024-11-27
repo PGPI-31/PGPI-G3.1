@@ -12,6 +12,13 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 import os
+from django.conf.global_settings import DEFAULT_FROM_EMAIL, EMAIL_BACKEND,\
+    EMAIL_HOST, EMAIL_USE_TLS, EMAIL_HOST_USER, EMAIL_HOST_PASSWORD
+from decouple import config
+from django.contrib.messages import constants as messages
+
+
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -46,7 +53,8 @@ INSTALLED_APPS = [
     'authentication',
     'boats',
     'orders',
-    'cart'
+    'cart',
+    'mail'
 ]
 
 MIDDLEWARE = [
@@ -72,6 +80,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'cart.cart_context.cart_context',
             ],
         },
     },
@@ -93,6 +102,9 @@ DATABASES = {
         'PORT': os.getenv('POSTGRES_PORT', '5432'),
         'OPTIONS': {
             'options': f"-c search_path={os.getenv('DB_SCHEMA', 'public')}"
+        },
+        'TEST': {
+            'NAME': 'test_safeport',  # Usa la base de datos precreada
         },
     }
 }
@@ -147,3 +159,27 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 AUTH_USER_MODEL = 'authentication.User'
+
+#Automatic mail
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587  # Puedes usar 25, 587 o 465 (SSL)
+EMAIL_USE_TLS = True  # Usar TLS para la seguridad de la conexión
+EMAIL_HOST_USER = config('EMAIL_HOST_USER', '')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', '')
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+
+MESSAGE_TAGS = {
+    messages.DEBUG: 'secondary',
+    messages.INFO: 'info',
+    messages.SUCCESS: 'success',
+    messages.WARNING: 'warning',
+    messages.ERROR: 'danger',  # Maps error messages to Bootstrap's alert-danger
+}
+
+# Stripe
+STRIPE_SECRET_KEY = config('STRIPE_SECRET_KEY', '')
+STRIPE_PUBLISHABLE_KEY = config('STRIPE_PUBLISHABLE_KEY', '')
+STRIPE_CURRENCY = "eur"
+STRIPE_WEBHOOK_SECRET = os.getenv('STRIPE_WEBHOOK_SECRET', '')

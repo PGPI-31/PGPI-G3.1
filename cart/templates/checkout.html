@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block headcontent %}
+<link rel="stylesheet" href="{% static 'css/cart.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="mb-4">
+    <a href="{% url 'ver_catalogo' %}" class="btn btn-outline-primary">
+        &larr; Volver al catálogo
+    </a>
+</div>
+<h2 class="text-center mb-4">Revisar pedido</h2>
+{% if cart.items.exists %}
+    <div class="cart-items mb-4">
+        <ul class="list-group">
+            {% for item in cart.items.all %}
+                <li class="list-group-item">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h5>{{ item.boat_instance.name }}</h5>
+                            <p><strong>Fecha inicio:</strong> {{ item.start_date }}</p>
+                            <p><strong>Fecha fin:</strong> {{ item.end_date }}</p>
+                            <p><strong>Precio por día:</strong> ${{ item.price_per_day }}</p>
+                            <p><strong>Número de días:</strong> {{ item.number_of_days }}</p>
+                        </div>
+                        <div>
+                            <p><strong>Total:</strong> ${{ item.total_price }}</p>
+                        </div>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="cart-total text-end">
+        <h4>Precio total: ${{ cart.get_total_price }}</h4>
+    </div>
+
+    <div class="text-center mt-4 mb-4">
+        <a href="{% url 'create_order' %}" class="btn btn-success">Confirmar pedido</a>
+    </div>
+{% else %}
+    <p class="text-center">Tu cesta está vacía.</p>
+{% endif %}
+{% endblock %}
