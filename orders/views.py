@@ -1,4 +1,5 @@
 from decimal import Decimal
+import json
 from venv import logger
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
@@ -253,7 +254,25 @@ def payment_success(request):
     return redirect('order_complete')
 
 def payment_cancel(request):
+    order_id = request.session.get('order_id')
+    order = get_object_or_404(Order, id=order_id)
+    order.status = "cancelled"
+    order.save()
     return render(request, "payment_cancel.html")
+
+@csrf_exempt
+def cancel_order(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        order_id = data.get('order_id')
+        try:
+            order = Order.objects.get(id=order_id, status='pending')
+            order.status = 'cancelled'
+            order.save()
+            return JsonResponse({'status': 'success'})
+        except Order.DoesNotExist:
+            return JsonResponse({'status': 'order_not_found'}, status=404)
+    return JsonResponse({'status': 'bad_request'}, status=400)
 
 
 @csrf_exempt
