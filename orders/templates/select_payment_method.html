@@ -64,8 +64,5 @@
                 form.submit();
             }
     });
-    window.addEventListener('beforeunload', function (e) {
-        navigator.sendBeacon('pedidos/cancelar-pedido/', JSON.stringify({ order_id: "{{ order.id }}" }));
-    });
 </script>
 {% endblock %}

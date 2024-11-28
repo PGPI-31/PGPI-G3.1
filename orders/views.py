@@ -13,6 +13,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from orders.models import StripePayment
 from django.http import HttpResponse, JsonResponse
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import get_template
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
@@ -130,6 +132,7 @@ def select_payment_method(request):
                 payment.save()
                 order.status = 'completed'
                 order.save()
+                send_order_mail(order)
                 return redirect('order_complete')
     else:
         form = PaymentMethodForm()
@@ -249,7 +252,7 @@ def payment_success(request):
     order.status = "completed"
     order.save()
 
-    #TODO: enviar correo de confirmación
+    send_order_mail(order)
 
     return redirect('order_complete')
 
@@ -296,3 +299,30 @@ def stripe_webhook(request):
         payment.save()
 
     return HttpResponse(status=200)
+
+def send_order_mail(order):
+    """
+    Envía el correo de resumen del pedido
+    """
+    client = Cliente.objects.filter(order=order).first()
+    payment = order.payments.first()
+    items = order.order_boats.select_related('boat')
+    subject = 'Pedido en SafePort realizado correctamente'
+    template = get_template('order_mail.html')
+    content = template.render({
+        'order': order,
+        'payment': payment,
+        'client': client,
+        'items': items
+    })
+    # Configuración del correo
+    message = EmailMultiAlternatives(
+        subject,  # Asunto del correo
+        '',  # Cuerpo del texto plano (opcional)
+        settings.EMAIL_HOST_USER,  # Remitente
+        [client.email]  # Destinatarios
+    )
+
+    # Adjuntar contenido HTML
+    message.attach_alternative(content, 'text/html')
+    message.send()

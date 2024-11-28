@@ -17,6 +17,7 @@ Proyecto desplegado: `https://safeport.onrender.com`
     - [8. Integración con Stripe](#8-integración-con-stripe)
       - [8.1 Stripe para el entorno de desarrollo](#81-stripe-para-el-entorno-de-desarrollo)
       - [8.2 Stripe para la imagen Docker en local](#82-stripe-para-la-imagen-docker-en-local)
+    - [9. Envío de correos](#9-envío-de-correos)
 
 
 ---
@@ -127,4 +128,10 @@ Para que el servicio pueda responder a las peticiones del proyecto, deberá escu
 
 #### 8.2 Stripe para la imagen Docker en local
 
-Será necesario seguir los pasos detallados en el apartado anterior, sobre la parte de la creación de stripe e inicialización del webhook local. Para insertar las variables de entorno en la imagen, 
+Será necesario seguir los pasos detallados en el apartado anterior, sobre la parte de la creación de stripe e inicialización del webhook local. Para insertar las variables de entorno en la imagen,
+
+### 9. Envío de correos
+
+Para el envío de correos al finalizar un pedido hacen falta las siguientes credenciales en .env
+
+`EMAIL_HOST_USER` y `EMAIL_HOST_PASSWORD`
