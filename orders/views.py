@@ -35,7 +35,7 @@ def create_order(request):
         return redirect('ver_catalogo')
 
     # Create the order
-    total_price = sum(item.total_price for item in cart.items.all())
+    total_price = cart.get_total_price()
     order = Order.objects.create(
         user=user,
         total_price=total_price,
@@ -188,7 +188,7 @@ def list_orders(request):
     """
     Muestra la pantalla de listado de pedidos
     """
-    orders = Order.objects.filter(user=request.user)
+    orders = Order.objects.filter(user=request.user).order_by('-order_date')
     return render(request, 'listar_pedidos.html', {'orders': orders})
 
 def stripe_payment(request):
