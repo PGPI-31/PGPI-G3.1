@@ -30,6 +30,7 @@ Proyecto desplegado: `https://safeport.onrender.com`
 ### 1. Clonar el repositorio en VSCode
 
 ### 2. Crear la base de datos
+#### 2.1 Crear base de datos safeport
 Entrar en la línea de comandos de postgresql:
 
 `cd "C:\Program Files\PostgreSQL\17\bin"`
@@ -60,6 +61,32 @@ password: safeport_password
 ```
 
 Comprobar que aparece la base de datos
+
+#### 2.1 Crear base de datos test_safeport
+Entrar en la línea de comandos de postgresql:
+
+`cd "C:\Program Files\PostgreSQL\17\bin"`
+`psql -U postgres`
+
+Crear la base de datos y usuario. Introducir los siguientes comandos:
+
+```
+ALTER USER safeport_user CREATEDB
+CREATE DATABASE test_safeport;
+GRANT ALL PRIVILEGES ON DATABASE test_safeport TO safeport_user;
+\q
+```
+
+Para verificar la base de datos: entrar en DBeaver, crear nueva conexión PostgreSQL y completar con los datos:
+```
+host: localhost
+database: test_safeport
+username: safeport_user
+password: safeport_password
+```
+
+Comprobar que aparece la base de datos
+
 
 ### 3. Crear entorno virtual, instalar requisitos, ejecutar
 Usando anaconda se aisla el entorno de desarrollo y gestionan dependencias.
