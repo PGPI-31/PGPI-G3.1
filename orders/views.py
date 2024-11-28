@@ -9,6 +9,7 @@ from orders.forms import ClientDataForm, PaymentMethodForm
 from orders.models import Order, OrderBoat, Cliente, Pago
 from safeport import settings
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
 from orders.models import StripePayment
 from django.http import HttpResponse, JsonResponse
 
@@ -163,6 +164,32 @@ def order_complete(request):
         'items': items,
     }
     return render(request, 'order_complete.html', context)
+
+def view_order(request, order_id):
+    """
+    Muestra la pantalla del seguimiento del pedido
+    """
+    order = get_object_or_404(Order, id=order_id)
+
+    payment = order.payments.first()
+    client = Cliente.objects.filter(order=order).first()
+    items = order.order_boats.select_related('boat')
+
+    context = {
+        'order': order,
+        'payment': payment,
+        'client': client,
+        'items': items,
+    }
+    return render(request, 'mostrar_pedido.html', context)
+
+@login_required
+def list_orders(request):
+    """
+    Muestra la pantalla de listado de pedidos
+    """
+    orders = Order.objects.filter(user=request.user)
+    return render(request, 'listar_pedidos.html', {'orders': orders})
 
 def stripe_payment(request):
     """
