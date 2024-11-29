@@ -17,5 +17,4 @@ urlpatterns = [
     path('create/', views.create_boat_instance, name='crear_productos'),
     path('modify/<int:boat_instance_id>', views.modify_boat_instance, name='modificar_productos'),
     path('modelos/<int:model_id>/', views.mostrar_modelo, name='mostrar_modelo'),
-
 ]
