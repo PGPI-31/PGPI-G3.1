@@ -60,6 +60,7 @@
                     <li><a href="{% url 'mostrar_cesta' %}">Ver cesta</a></li>
                 {% endif %}
                 {% if user.is_authenticated and user.is_superuser %}
+                    <li><a href="{% url 'user_list' %}">Ver usuarios</a></li>
                     <li><a href="{% url 'listar_tipos' %}">Ver tipos</a></li>
                     <li><a href="{% url 'listar_puertos' %}">Ver puertos</a></li>
                     <li><a href="{% url 'crear_productos' %}">Añadir Productos</a></li>
