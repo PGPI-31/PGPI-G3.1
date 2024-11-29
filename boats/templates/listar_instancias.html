@@ -40,6 +40,9 @@
         {% else %}
         <p class="text-danger">Este producto no está disponible para alquilar.</p>
         {% endif %}
+        {% if user.is_superuser %}
+        <button type="submit"><a href="{% url 'modificar_productos' boat_instance_id=producto.id %}" style="text-decoration: none;">Modificar Producto</a></button>
+        {% endif %}
         {% endif %}
 
     </div>
