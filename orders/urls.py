@@ -7,6 +7,9 @@ urlpatterns = [
     path('client-data/', views.collect_client_data, name='collect_client_data'),
     path('payment-method/', views.select_payment_method, name='select_payment_method'),
     path('order-complete/', views.order_complete, name='order_complete'),
+    path('ver/<int:order_id>/', views.view_order, name='show_order'),
+    path('listar', views.list_orders, name='list_orders'),
+    path('cancelar-pedido/', views.cancel_order, name='cancel_order'),
 
     # Stripe
     path('stripe-payment/', views.stripe_payment, name='stripe_payment'),

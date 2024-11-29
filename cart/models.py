@@ -14,7 +14,13 @@ class Cart(models.Model):
         return f"Cart for session {self.session_key}"
     
     def get_total_price(self):
-        return sum(item.total_price for item in self.items.all())
+        fee = 0
+        price_without_fee = sum(item.total_price for item in self.items.all())
+        if price_without_fee > 0:
+            fee = 30
+        if price_without_fee > 1000:
+            fee = 0
+        return price_without_fee + fee
 
 class CartItem(models.Model):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name='items')
