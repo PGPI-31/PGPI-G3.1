@@ -157,6 +157,74 @@ def create_port(request):
     return render(request, 'admin/create_port.html', {'form': form})
 
 
+@login_required
+def modify_port(request, port_id):
+    if not request.user.is_superuser:
+        return HttpResponseForbidden("No tienes permiso para modificar puertos.")
+    
+    port = get_object_or_404(Port, id=port_id)
+
+    if request.method == 'POST':
+        form = PortForm(request.POST, instance=port)
+        if form.is_valid():
+            form.save()
+            return redirect('listar_puertos')  
+    else:
+        form = PortForm(instance=port)
+        
+    return render(request, 'admin/modify_port.html', {'form': form})
+
+@login_required
+def modify_boat_type(request, type_id):
+    if not request.user.is_superuser:
+        return HttpResponseForbidden("No tienes permiso para modificar el tipo de barco.")
+    
+    boat_type = get_object_or_404(BoatType, id=type_id)
+
+    if request.method == 'POST':
+        form = BoatTypeForm(request.POST, instance=boat_type)
+        if form.is_valid():
+            form.save()
+            return redirect('listar_tipos')  
+    else:
+        form = BoatTypeForm(instance=boat_type)        
+    return render(request, 'admin/modify_boat_type.html', {'form': form})
+
+
+@login_required
+def modify_boat_model(request, model_id):
+    if not request.user.is_superuser:
+        return HttpResponseForbidden("No tienes permiso para modificar modelos de barcos.")
+    
+    boat_model = get_object_or_404(BoatModel, id=model_id)
+
+    if request.method == 'POST':
+        form = BoatModelForm(request.POST, request.FILES,instance=boat_model)
+        if form.is_valid():
+            form.save()
+            return redirect('listar_modelos')
+    else:
+        form = BoatModelForm(instance=boat_model)
+
+    return render(request, 'admin/modify_boat_model.html', {'form': form})
+
+@login_required
+def modify_boat_instance(request,boat_instance_id):
+    if not request.user.is_superuser:
+        return HttpResponseForbidden("No tienes permiso para modificar una instancia de barco.")
+    boat_instance = get_object_or_404(BoatInstance, id=boat_instance_id)
+
+    if request.method == 'POST':
+        form = BoatInstanceForm(request.POST,instance=boat_instance)
+        if form.is_valid():
+            form.save()
+            return redirect('listar_productos')
+    else:
+        form = BoatInstanceForm(instance=boat_instance)
+
+    return render(request, 'admin/modify_boat_instance.html', {'form': form})
+
+
 def mostrar_modelo(request, model_id):
     boat_model = get_object_or_404(BoatModel, id=model_id)
     boat_instances = boat_model.instances.all()

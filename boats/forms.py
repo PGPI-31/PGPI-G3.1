@@ -11,8 +11,7 @@ class BoatInstanceForm(forms.ModelForm):
             'model': 'Modelo',
             'name': 'Nombre',
             'port': 'Puerto',
-            'available': 'Disponible',
-            'price_per_day': 'Precio por día',
+            'available': 'Disponible'
         }
 
 
@@ -40,6 +39,7 @@ class BoatModelForm(forms.ModelForm):
             'capacity': 'Capacidad',
             'brand': 'Marca',
             'image': 'Imagen',
+            'price_per_day': 'Precio por día'
         }
 
 

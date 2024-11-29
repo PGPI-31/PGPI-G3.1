@@ -1,4 +1,5 @@
 from decimal import Decimal
+import json
 from venv import logger
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
@@ -9,8 +10,11 @@ from orders.forms import ClientDataForm, PaymentMethodForm
 from orders.models import Order, OrderBoat, Cliente, Pago
 from safeport import settings
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
 from orders.models import StripePayment
 from django.http import HttpResponse, JsonResponse
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import get_template
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
@@ -34,7 +38,7 @@ def create_order(request):
         return redirect('ver_catalogo')
 
     # Create the order
-    total_price = sum(item.total_price for item in cart.items.all())
+    total_price = cart.get_total_price()
     order = Order.objects.create(
         user=user,
         total_price=total_price,
@@ -128,6 +132,7 @@ def select_payment_method(request):
                 payment.save()
                 order.status = 'completed'
                 order.save()
+                send_order_mail(order)
                 return redirect('order_complete')
     else:
         form = PaymentMethodForm()
@@ -163,6 +168,32 @@ def order_complete(request):
         'items': items,
     }
     return render(request, 'order_complete.html', context)
+
+def view_order(request, order_id):
+    """
+    Muestra la pantalla del seguimiento del pedido
+    """
+    order = get_object_or_404(Order, id=order_id)
+
+    payment = order.payments.first()
+    client = Cliente.objects.filter(order=order).first()
+    items = order.order_boats.select_related('boat')
+
+    context = {
+        'order': order,
+        'payment': payment,
+        'client': client,
+        'items': items,
+    }
+    return render(request, 'mostrar_pedido.html', context)
+
+@login_required
+def list_orders(request):
+    """
+    Muestra la pantalla de listado de pedidos
+    """
+    orders = Order.objects.filter(user=request.user).order_by('-order_date')
+    return render(request, 'listar_pedidos.html', {'orders': orders})
 
 def stripe_payment(request):
     """
@@ -221,12 +252,30 @@ def payment_success(request):
     order.status = "completed"
     order.save()
 
-    #TODO: enviar correo de confirmación
+    send_order_mail(order)
 
     return redirect('order_complete')
 
 def payment_cancel(request):
+    order_id = request.session.get('order_id')
+    order = get_object_or_404(Order, id=order_id)
+    order.status = "cancelled"
+    order.save()
     return render(request, "payment_cancel.html")
+
+@csrf_exempt
+def cancel_order(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        order_id = data.get('order_id')
+        try:
+            order = Order.objects.get(id=order_id, status='pending')
+            order.status = 'cancelled'
+            order.save()
+            return JsonResponse({'status': 'success'})
+        except Order.DoesNotExist:
+            return JsonResponse({'status': 'order_not_found'}, status=404)
+    return JsonResponse({'status': 'bad_request'}, status=400)
 
 
 @csrf_exempt
@@ -250,3 +299,30 @@ def stripe_webhook(request):
         payment.save()
 
     return HttpResponse(status=200)
+
+def send_order_mail(order):
+    """
+    Envía el correo de resumen del pedido
+    """
+    client = Cliente.objects.filter(order=order).first()
+    payment = order.payments.first()
+    items = order.order_boats.select_related('boat')
+    subject = 'Pedido en SafePort realizado correctamente'
+    template = get_template('order_mail.html')
+    content = template.render({
+        'order': order,
+        'payment': payment,
+        'client': client,
+        'items': items
+    })
+    # Configuración del correo
+    message = EmailMultiAlternatives(
+        subject,  # Asunto del correo
+        '',  # Cuerpo del texto plano (opcional)
+        settings.EMAIL_HOST_USER,  # Remitente
+        [client.email]  # Destinatarios
+    )
+
+    # Adjuntar contenido HTML
+    message.attach_alternative(content, 'text/html')
+    message.send()
