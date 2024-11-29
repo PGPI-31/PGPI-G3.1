@@ -132,7 +132,9 @@ def select_payment_method(request):
                 payment.save()
                 order.status = 'completed'
                 order.save()
-                send_order_mail(order)
+                base_url = request.build_absolute_uri('/')
+                ruta = base_url + '/pedidos/' + str(order.id) + '/'
+                send_order_mail(order, ruta)
                 return redirect('order_complete')
     else:
         form = PaymentMethodForm()
@@ -252,7 +254,9 @@ def payment_success(request):
     order.status = "completed"
     order.save()
 
-    send_order_mail(order)
+    base_url = request.build_absolute_uri('/')
+    ruta = base_url + '/pedidos/' + str(order.id) + '/'
+    send_order_mail(order, ruta)
 
     return redirect('order_complete')
 
@@ -300,7 +304,7 @@ def stripe_webhook(request):
 
     return HttpResponse(status=200)
 
-def send_order_mail(order):
+def send_order_mail(order, ruta):
     """
     Envía el correo de resumen del pedido
     """
@@ -313,7 +317,8 @@ def send_order_mail(order):
         'order': order,
         'payment': payment,
         'client': client,
-        'items': items
+        'items': items,
+        'ruta': ruta
     })
     # Configuración del correo
     message = EmailMultiAlternatives(
