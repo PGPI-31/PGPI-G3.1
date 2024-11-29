@@ -13,7 +13,7 @@ class Order(models.Model):
 
 class OrderBoat(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='order_boats')
-    boat = models.ForeignKey(BoatInstance, on_delete=models.CASCADE)
+    boat = models.ForeignKey(BoatInstance, on_delete=models.CASCADE, related_name='order_boats')
     days = models.IntegerField()
     price_per_day = models.DecimalField(max_digits=10, decimal_places=2)
     price = models.DecimalField(max_digits=10, decimal_places=2)

@@ -3,15 +3,78 @@ from .models import BoatInstance, BoatModel, BoatType, Port
 from .forms import BoatInstanceForm, BoatTypeForm, BoatModelForm, PortForm
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden
-from django.db.models import Q
+from django.db.models import Count, Q, Case, When, IntegerField
 from orders.models import OrderBoat
 from datetime import datetime
 
 
 def ver_catalogo(request):
+    title = request.GET.get('title')  # Nombre del barco
+    boat_type = request.GET.get('boat_type')  # ID del tipo de barco
+    port = request.GET.get('port')  # ID del puerto
     modelos = BoatModel.objects.all()
+    start_date = request.GET.get('start_date')
+    end_date = request.GET.get('end_date')
+
+    boats = BoatInstance.objects.all()
+    unavailable_boats = set() 
+    # Filtrar por título si se proporciona
+    if title:
+        modelos = modelos.filter(name__icontains=title)
+
+    # Filtrar por tipo de barco si se proporciona
+    if boat_type:
+        modelos = modelos.filter(boat_type_id=boat_type)
+
+    # Filtrar por puerto si se proporciona
+    if port and port is not None and port != '':
+        port_id = int(port)
+        modelos = modelos.annotate(
+            available_at_port=Count(
+                'instances',
+                filter=Q(instances__port_id=port_id, instances__available=True)
+            )
+        )
+    else:
+        modelos = modelos.annotate(
+            available_at_port=Case(
+                When(pk__isnull=False, then=1),  # Every model gets 1 for availability
+                default=0,
+                output_field=IntegerField()
+            )
+        )
+
+    if start_date and end_date:
+        modelos = modelos.annotate(
+            available_within_dates=Count(
+                'instances',
+                filter=Q(
+                    instances__order_boats__start_date__gte=end_date  # Ends before the new booking starts
+                ) | Q(
+                    instances__order_boats__end_date__lte=start_date  # Starts after the new booking ends
+                )
+            )
+        )
+    else:
+        # Default: All models considered available within date range
+        modelos = modelos.annotate(
+            available_within_dates=Case(
+                When(pk__isnull=False, then=1),  # All models available if no date selected
+                default=0,
+                output_field=IntegerField()
+            )
+        )
+    
+
+    boat_types = BoatType.objects.all()
     ports = Port.objects.all()
-    return render(request, 'catalogo.html', {'modelos': modelos, 'ports': ports})
+    context = {
+        'modelos': modelos,
+        'ports': ports,
+        'boat_types': boat_types,
+        'unavailable_boats': unavailable_boats,
+    }
+    return render(request, 'catalogo.html', context)
 
 
 def listar_modelos(request):

@@ -1,18 +1,23 @@
 {% extends "cesta.html" %}
+{% load static %}
+
+{% block headcontent %}
+<link rel="stylesheet" href="{% static 'css/catalogo.css' %}">
+{% endblock %}
 
 {% block title %}Catálogo{% endblock %}
 
 {% block productos %}
 <h1>Catálogo</h1>
-<form method="get" action="{% url 'filtrar_barcos' %}" class="mb-4">
+<form method="get" action="{% url 'ver_catalogo' %}" class="mb-4">
     <div class="row">
         <!-- Campo de búsqueda por título -->
-        <div class="col-md-3">
+        <div class="col-md-4">
             <input type="text" name="title" class="form-control" placeholder="Nombre del barco" value="{{ request.GET.title }}">
         </div>
 
         <!-- Campo de selección de tipo de barco -->
-        <div class="col-md-3">
+        <div class="col-md-2">
             <select name="boat_type" class="form-select">
                 <option value="">Todos los tipos</option>
                 {% for type in boat_types %}
@@ -24,7 +29,7 @@
         </div>
 
         <!-- Campo de selección de puerto -->
-        <div class="col-md-3">
+        <div class="col-md-2">
             <select name="port" class="form-select">
                 <option value="">Todos los puertos</option>
                 {% for port in ports %}
@@ -35,9 +40,14 @@
             </select>
         </div>
 
-        <!-- Campo de fecha -->
-        <div class="col-md-3">
-            <input type="date" name="date" class="form-control" value="{{ request.GET.date }}">
+        <!-- Campo de fecha inicio -->
+        <div class="col-md-2">
+            <input type="date" name="start_date" class="form-control" value="{{ request.GET.start_date }}">
+        </div>
+
+        <!-- Campo de fecha fin -->
+        <div class="col-md-2">
+            <input type="date" name="end_date" class="form-control" value="{{ request.GET.end_date }}">
         </div>
 
         <!-- Botón de búsqueda -->
@@ -50,48 +60,46 @@
 <div class="product-grid mb-4">
     {% for modelo in modelos %}
     <div class="product-card">
-        <a href="{% url 'mostrar_modelo' modelo.model.id %}" class="text-decoration-none">
-            <img src="{{ modelo.model.image.url }}" alt="Imagen de {{ modelo.model.name }}" class="img-fluid">
-            <h2>{{ modelo.model.name }}</h2>
-            <p><strong>Tipo:</strong> {{ modelo.model.boat_type.name }}</p>
-            <p><strong>Capacidad:</strong> {{ modelo.model.capacity }}</p>
-            <p><strong>Marca:</strong> {{ modelo.model.brand }}</p>
-            <p><strong>Precio por día:</strong> {{ modelo.model.price_per_day }}</p>
+        <a href="{% url 'mostrar_modelo' modelo.id %}" class="text-decoration-none">
+            <img src="{{ modelo.image.url }}" alt="Imagen de {{ modelo.name }}" class="img-fluid">
+            <h2>{{ modelo.name }}</h2>
+            <p><strong>Tipo:</strong> {{ modelo.boat_type.name }}</p>
+            <p><strong>Capacidad:</strong> {{ modelo.capacity }}</p>
+            <p><strong>Marca:</strong> {{ modelo.brand }}</p>
+            <p><strong>Precio por día:</strong> {{ modelo.price_per_day }}</p>
         </a>
-        <!-- Verificar si el barco está disponible o no -->
-        {% if modelo.id in unavailable_boats %}
-            <div class="badge bg-danger text-white mt-2">No Disponible</div>
-            <button class="btn btn-secondary w-100 mt-2" disabled>Alquilar</button>
+        <!-- Trigger Modal Button -->
+        {% if modelo.available_at_port|default:0 > 0 and modelo.available_within_dates|default:0 > 0 %}
+        <button class="btn btn-primary w-100 mt-2" data-bs-toggle="modal" data-bs-target="#modal-{{ modelo.id }}">
+            Alquilar
+        </button>
         {% else %}
-            <!-- Trigger Modal Button -->
-            <button class="btn btn-primary w-100 mt-2" data-bs-toggle="modal" data-bs-target="#modal-{{ modelo.id }}">
-                Alquilar
-            </button>
+        <p class="text-danger">No disponible</p>
         {% endif %}
     </div>
 
     <!-- Modal for Each Boat -->
-    <div class="modal fade" id="modal-{{ modelo.model.id }}" tabindex="-1" aria-labelledby="modalLabel-{{ modelo.model.id }}" aria-hidden="true">
+    <div class="modal fade" id="modal-{{ modelo.id }}" tabindex="-1" aria-labelledby="modalLabel-{{ modelo.id }}" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modalLabel-{{ modelo.model.id }}">Seleccionar fechas para {{ modelo.model.name }}</h5>
+                    <h5 class="modal-title" id="modalLabel-{{ modelo.id }}">Seleccionar fechas para {{ modelo.name }}</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form method="post" action="{% url 'adicion_cesta_catalogo' modelo.model.id %}">
+                    <form method="post" action="{% url 'adicion_cesta_catalogo' modelo.id %}">
                         {% csrf_token %}
                         <div class="mb-3">
-                            <label for="start_date-{{ modelo.model.id }}" class="form-label">Fecha de inicio</label>
-                            <input type="date" id="start_date-{{ modelo.model.id }}" name="start_date" class="form-control" required>
+                            <label for="start_date-{{ modelo.id }}" class="form-label">Fecha de inicio</label>
+                            <input type="date" id="start_date-{{ modelo.id }}" name="start_date" class="form-control" required>
                         </div>
                         <div class="mb-3">
-                            <label for="end_date-{{ modelo.model.id }}" class="form-label">Fecha de fin</label>
-                            <input type="date" id="end_date-{{ modelo.model.id }}" name="end_date" class="form-control" required>
+                            <label for="end_date-{{ modelo.id }}" class="form-label">Fecha de fin</label>
+                            <input type="date" id="end_date-{{ modelo.id }}" name="end_date" class="form-control" required>
                         </div>
                         <div class="mb-3">
-                            <label for="dock-{{ modelo.model.id }}" class="form-label">Seleccionar puerto</label>
-                            <select id="dock-{{ modelo.model.id }}" name="dock" class="form-select" required>
+                            <label for="dock-{{ modelo.id }}" class="form-label">Seleccionar puerto</label>
+                            <select id="dock-{{ modelo.id }}" name="dock" class="form-select" required>
                                 {% for port in ports %}
                                 <option value="{{ port.id }}">{{ port.name }}</option>
                                 {% endfor %}
@@ -107,4 +115,18 @@
     <p>No hay productos disponibles.</p>
     {% endfor %}
 </div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const form = document.querySelector('form[action="{% url "ver_catalogo" %}"]');
+        const startDate = form.querySelector('input[name="start_date"]');
+        const endDate = form.querySelector('input[name="end_date"]');
+
+        form.addEventListener("submit", function (event) {
+            if ((startDate.value && !endDate.value) || (!startDate.value && endDate.value)) {
+                event.preventDefault();
+                alert("Por favor, introduce ambas fechas: fecha de inicio y fecha de fin.");
+            }
+        });
+    });
+</script>
 {% endblock %}
