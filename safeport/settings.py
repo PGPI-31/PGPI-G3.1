@@ -103,6 +103,9 @@ DATABASES = {
         'OPTIONS': {
             'options': f"-c search_path={os.getenv('DB_SCHEMA', 'public')}"
         },
+        'TEST': {
+            'NAME': 'test_safeport',  # Usa la base de datos precreada
+        },
     }
 }
 
