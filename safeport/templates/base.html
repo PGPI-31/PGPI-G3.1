@@ -37,7 +37,12 @@
                 <!-- User Section -->
                 <div class="d-flex align-items-center ms-auto">
                     {% if user.is_authenticated %}
-                        <span class="text-light me-3">Hola, {{ user.email }}!</span>
+                        <span class="text-light me-2">Hola, {{ user.email }}!</span>
+                        <ul class="navbar-nav me-auto">
+                            <li class="nav-item me-1">
+                                <a class="nav-link" href="{% url 'list_orders' %}">Mis pedidos</a>
+                            </li>
+                        </ul>
                         <a href="{% url 'logout' %}" class="btn btn-outline-light me-2">Abandonar sesión</a>
                     {% else %}
                         <a href="{% url 'login' %}" class="btn btn-outline-light me-2">Iniciar Sesión</a>
