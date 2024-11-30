@@ -212,6 +212,13 @@ def list_orders(request):
     orders = Order.objects.filter(user=request.user).order_by('-order_date')
     return render(request, 'listar_pedidos.html', {'orders': orders})
 
+def list_orders_admin(request):
+    """
+    Muestra la pantalla de listado de todos los pedidos
+    """
+    orders = Order.objects.order_by('-order_date')
+    return render(request, 'admin/listar_pedidos_admin.html', {'orders': orders})
+
 def stripe_payment(request):
     """
     Método para pago con stripe

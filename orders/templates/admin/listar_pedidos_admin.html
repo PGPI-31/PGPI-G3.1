@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block headcontent %}
+<link rel="stylesheet" href="{% static 'css/cart.css' %}">
+{% endblock %}
+
+{% block content %}
+<h2 class="text-center mb-4">Pedidos realizados</h2>
+{% if orders %}
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Número del Pedido</th>
+            <th>Fecha</th>
+            <th>Precio total</th>
+            <th>Estado</th>
+            <th>Acción</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for order in orders %}
+        <tr>
+            <td>{{ order.id }}</td>
+            <td>{{ order.order_date|date:"d/m/Y" }}</td>
+            <td>{{ order.total_price }} €</td>
+            <td>{{ order.get_status_in_spanish }}</td>
+            <td>
+                <a href="{% url 'show_order_admin' order.id %}" class="btn btn-primary">Ver Detalles</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>No ha realizado ningún pedido.</p>
+{% endif %}
+{% endblock %}
