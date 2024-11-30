@@ -76,7 +76,11 @@
                 </ul>
                 <div class="text-end mt-3">
                     <p><strong>Total: {{ cart.get_total_price }}€</strong></p>
-                    <a href="{% url 'checkout' %}" class="btn btn-primary w-100">Revisar pedido</a>
+                    <form method="post" action="{% url 'checkout' %}">
+                        {% csrf_token %}
+                        <button class="btn btn-primary w-100" type="submit" name="action" value="normal">Revisar pedido</button>
+                        <button class="btn btn-warning w-100 mt-2" type="submit" name="action" value="fast">Compra rápida. Pago en sitio</button>
+                    </form>
                 </div>
             {% else %}
                 <p class="text-center mt-5">Tu cesta está vacía</p>

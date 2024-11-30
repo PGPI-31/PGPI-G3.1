@@ -82,8 +82,19 @@ def view_cart(request):
 
 
 def checkout(request):
-   cart = get_or_create_cart(request)
-   return render(request, 'checkout.html', {'cart': cart})
+    if request.method == "POST":
+        action = request.POST.get("action")
+        if action == "normal":
+            request.session['fast'] = False
+            cart = get_or_create_cart(request)
+            return render(request, 'checkout.html', {'cart': cart})
+        elif action == "fast":
+            request.session['fast'] = True
+            return redirect('create_order')
+        else:
+            return redirect('ver_catalogo')
+    else:
+        return redirect('ver_catalogo')
 
 def add_to_cart_catalogue(request, model_id):
     if request.method == "POST":

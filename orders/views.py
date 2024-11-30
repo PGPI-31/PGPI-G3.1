@@ -71,6 +71,7 @@ def create_order(request):
 def collect_client_data(request):
     order_id = request.session.get('order_id')
     order = get_object_or_404(Order, id=order_id)
+
     # Get the order (logged-in or anonymous)
     if request.user.is_authenticated:
         if order:
@@ -117,6 +118,20 @@ def select_payment_method(request):
     order_id = request.session.get('order_id')
     order = get_object_or_404(Order, id=order_id)
 
+    # Si el pedido es rápido, pago en sitio y salida de la página
+    if request.session.get('fast') == True:
+        payment, created = Pago.objects.get_or_create(order=order)
+        payment.method = "on_site"
+        payment.payment_address = None
+        payment.account_number = None
+        payment.save()
+        order.status = 'completed'
+        order.save()
+        base_url = request.build_absolute_uri('/')
+        ruta = base_url + 'pedidos/ver/' + str(order.id) + '/'
+        send_order_mail(order, ruta)
+        return redirect('order_complete')
+
     if request.method == 'POST':
         form = PaymentMethodForm(request.POST)
         if form.is_valid():
@@ -133,7 +148,7 @@ def select_payment_method(request):
                 order.status = 'completed'
                 order.save()
                 base_url = request.build_absolute_uri('/')
-                ruta = base_url + '/pedidos/' + str(order.id) + '/'
+                ruta = base_url + 'pedidos/ver/' + str(order.id) + '/'
                 send_order_mail(order, ruta)
                 return redirect('order_complete')
     else:
@@ -255,7 +270,7 @@ def payment_success(request):
     order.save()
 
     base_url = request.build_absolute_uri('/')
-    ruta = base_url + '/pedidos/' + str(order.id) + '/'
+    ruta = base_url + 'pedidos/ver/' + str(order.id) + '/'
     send_order_mail(order, ruta)
 
     return redirect('order_complete')
