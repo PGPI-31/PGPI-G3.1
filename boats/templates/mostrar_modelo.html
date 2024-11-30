@@ -1,6 +1,13 @@
-{% extends "base.html" %}
+{% extends "cesta.html" %}
+{% load static %}
 
-{% block content %}
+{% block headcontent %}
+<link rel="stylesheet" href="{% static 'css/catalogo.css' %}">
+{% endblock %}
+
+{% block title %}Catálogo{% endblock %}
+
+{% block productos %}
 <div class="mb-4">
     <a href="{% url 'ver_catalogo' %}" class="btn btn-outline-primary">
         &larr; Volver al catálogo

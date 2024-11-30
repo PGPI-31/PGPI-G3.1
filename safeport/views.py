@@ -25,3 +25,6 @@ def home(request):
         'ports': ports
     }
     return render(request, 'escaparate.html', context)
+
+def about(request):
+    return render(request, 'about.html')

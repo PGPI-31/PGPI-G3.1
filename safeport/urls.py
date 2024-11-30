@@ -23,10 +23,11 @@ from django.urls import path, include
 from django.conf.urls.static import static
 from django.conf import settings
 
-from safeport.views import home
+from safeport.views import about, home
 
 urlpatterns = [
     path('', home, name='home'),
+    path('about/', about, name='ver_info'),
     path('admin/', admin.site.urls),
     path('auth/', include('authentication.urls')),
     path('productos/', include('boats.urls')),

@@ -3,7 +3,7 @@ from .models import BoatInstance, BoatModel, BoatType, Port
 from .forms import BoatInstanceForm, BoatTypeForm, BoatModelForm, PortForm
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden
-from django.db.models import Count, Q, Case, When, IntegerField
+from django.db.models import Count, Q, Case, When, IntegerField, Sum
 from orders.models import OrderBoat
 from datetime import datetime
 
@@ -44,17 +44,29 @@ def ver_catalogo(request):
             )
         )
 
+
     if start_date and end_date:
-        modelos = modelos.annotate(
-            available_within_dates=Count(
-                'instances',
-                filter=Q(
-                    instances__order_boats__start_date__gte=end_date  # Ends before the new booking starts
-                ) | Q(
-                    instances__order_boats__end_date__lte=start_date  # Starts after the new booking ends
-                )
-            )
-        )
+        start = datetime.strptime(start_date, "%Y-%m-%d").date()
+        end = datetime.strptime(end_date, "%Y-%m-%d").date()
+        for modelo in modelos:
+            # Retrieve all instances for the current model and port (if provided)
+            instances = modelo.instances.filter(available=True)
+            if port_id:
+                instances = instances.filter(port_id=port_id)
+
+            # Initialize the count of available instances
+            available_count = 0
+
+            for instance in instances:
+                # Get all orders for this instance
+                orders = instance.order_boats.all()
+
+                # Check if the instance is free within the date range
+                if not any(order.start_date < end and order.end_date > start for order in orders):
+                    available_count += 1
+
+            # Annotate the model with the calculated count
+            modelo.available_within_dates = available_count
     else:
         # Default: All models considered available within date range
         modelos = modelos.annotate(
@@ -64,7 +76,6 @@ def ver_catalogo(request):
                 output_field=IntegerField()
             )
         )
-    
 
     boat_types = BoatType.objects.all()
     ports = Port.objects.all()
