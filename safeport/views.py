@@ -6,7 +6,7 @@ from django.db.models import Count
 def home(request):  
     # Most rented boats
     most_rented_boats = (
-        BoatModel.objects.annotate(rental_count=Count('instances__orderboat'))
+        BoatModel.objects.annotate(rental_count=Count('instances__order_boats'))
         .order_by('-rental_count')[:3]
     )
 
@@ -25,3 +25,6 @@ def home(request):
         'ports': ports
     }
     return render(request, 'escaparate.html', context)
+
+def about(request):
+    return render(request, 'about.html')

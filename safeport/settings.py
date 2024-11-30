@@ -103,6 +103,9 @@ DATABASES = {
         'OPTIONS': {
             'options': f"-c search_path={os.getenv('DB_SCHEMA', 'public')}"
         },
+        'TEST': {
+            'NAME': 'test_safeport',  # Usa la base de datos precreada
+        },
     }
 }
 
@@ -135,6 +138,10 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
+
+USE_I18N = True
+USE_L10N = True
+LANGUAGE_CODE = 'es'
 
 
 # Static files (CSS, JavaScript, Images)
