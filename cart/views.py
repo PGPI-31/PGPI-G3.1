@@ -123,8 +123,8 @@ def add_to_cart_catalogue(request, model_id):
             port=port,
             available=True
         ).exclude(
-            cartitem__start_date__lt=end_date,
-            cartitem__end_date__gt=start_date,
+            order_boats__start_date__lte=end_date,
+            order_boats__end_date__gte=start_date,
         ).first()
 
         if not available_instance:
