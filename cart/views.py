@@ -124,7 +124,10 @@ def add_to_cart_catalogue(request, model_id):
             available=True
         ).exclude(
             order_boats__start_date__lte=end_date,
-            order_boats__end_date__gte=start_date,
+            order_boats__end_date__gte=start_date
+        ).exclude(
+            cartitem__start_date__lte=end_date,
+            cartitem__end_date__gte=start_date
         ).first()
 
         if not available_instance:
@@ -201,6 +204,9 @@ def add_quantity(request, group_key):
         model=boat_model,
         port=port,
         available=True
+    ).exclude(
+        order_boats__start_date__lte=end_date,
+        order_boats__end_date__gte=start_date
     ).exclude(
         cartitem__start_date__lt=end_date,
         cartitem__end_date__gt=start_date
