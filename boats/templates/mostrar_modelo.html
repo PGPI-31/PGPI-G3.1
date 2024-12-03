@@ -1,6 +1,13 @@
-{% extends "base.html" %}
+{% extends "cesta.html" %}
+{% load static %}
 
-{% block content %}
+{% block headcontent %}
+<link rel="stylesheet" href="{% static 'css/catalogo.css' %}">
+{% endblock %}
+
+{% block title %}Catálogo{% endblock %}
+
+{% block productos %}
 <div class="mb-4">
     <a href="{% url 'ver_catalogo' %}" class="btn btn-outline-primary">
         &larr; Volver al catálogo
@@ -25,6 +32,9 @@
                 <p><strong>Capacidad:</strong> {{ boat_model.capacity }} personas</p>
                 <p><strong>Fecha de salida:</strong> {{ boat_model.release_date|date:"d/m/Y" }}</p>
                 <p><strong>Precio por día:</strong> {{ boat_model.price_per_day }}</p>
+                {% if user.is_authenticated and user.is_superuser %}
+                    <button type="submit"><a href="{% url 'modificar_modelo' model_id=boat_model.id %}" style="text-decoration: none;">Modificar Producto</a></button>
+                {% endif %}
             </div>
         </div>
     </div>

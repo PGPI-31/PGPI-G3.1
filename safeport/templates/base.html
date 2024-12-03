@@ -15,29 +15,41 @@
     <!-- Header -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
         <div class="container-fluid">
+            {% if user.is_authenticated and user.is_superuser %}
             <div>
-                <button class="menu-button" id="menu-toggle">☰</button>
+                <button class="menu-button" id="menu-toggle">☰ Panel de Administración</button>
             </div>
+            {% endif %}
             <!-- Logo and Brand -->
             <a class="navbar-brand d-flex align-items-center" href="{% url 'home' %}">
                 <img src="{% static 'logo.png' %}" alt="SafePort Logo" height="50" class="me-2">
                 SafePort
             </a>
+            {% if user.is_authenticated and user.is_superuser %}
             <!-- Navbar Toggle for Mobile -->
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
+            {% endif %}
             <!-- Navbar Links -->
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'ver_catalogo' %}">Catálogo</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'ver_info' %}">Sobre SafePort</a>
+                    </li>
                 </ul>
                 <!-- User Section -->
                 <div class="d-flex align-items-center ms-auto">
                     {% if user.is_authenticated %}
-                        <span class="text-light me-3">Hola, {{ user.email }}!</span>
+                        <span class="text-light me-2">Hola, {{ user.email }}!</span>
+                        <ul class="navbar-nav me-auto">
+                            <li class="nav-item me-1">
+                                <a class="nav-link" href="{% url 'list_orders' %}">Mis pedidos</a>
+                            </li>
+                        </ul>
                         <a href="{% url 'logout' %}" class="btn btn-outline-light me-2">Abandonar sesión</a>
                     {% else %}
                         <a href="{% url 'login' %}" class="btn btn-outline-light me-2">Iniciar Sesión</a>
@@ -47,6 +59,7 @@
             </div>
         </div>
     </nav>
+    {% if user.is_authenticated and user.is_superuser %}
     <!-- Menu Button and Side Menu -->
     <div class="menu-container">
         <!-- Button -->
@@ -56,20 +69,18 @@
                 <li><a href="{% url 'home' %}">Inicio</a></li>
                 <li><a href="{% url 'listar_productos' %}">Ver productos</a></li>
                 <li><a href="{% url 'listar_modelos' %}">Ver modelos</a></li>
-                {% if user.is_authenticated %}
-                    <li><a href="{% url 'mostrar_cesta' %}">Ver cesta</a></li>
-                {% endif %}
-                {% if user.is_authenticated and user.is_superuser %}
-                    <li><a href="{% url 'listar_tipos' %}">Ver tipos</a></li>
-                    <li><a href="{% url 'listar_puertos' %}">Ver puertos</a></li>
-                    <li><a href="{% url 'crear_productos' %}">Añadir Productos</a></li>
-                    <li><a href="{% url 'crear_modelo' %}">Añadir Modelos</a></li>
-                    <li><a href="{% url 'crear_tipo' %}">Añadir Tipos</a></li>
-                    <li><a href="{% url 'crear_puerto' %}">Añadir Puertos</a></li>
-                {% endif %}
+                <li><a href="{% url 'user_list' %}">Ver usuarios</a></li>
+                <li><a href="{% url 'list_orders_admin' %}">Ver pedidos</a></li>
+                <li><a href="{% url 'listar_tipos' %}">Ver tipos</a></li>
+                <li><a href="{% url 'listar_puertos' %}">Ver puertos</a></li>
+                <li><a href="{% url 'crear_productos' %}">Añadir Productos</a></li>
+                <li><a href="{% url 'crear_modelo' %}">Añadir Modelos</a></li>
+                <li><a href="{% url 'crear_tipo' %}">Añadir Tipos</a></li>
+                <li><a href="{% url 'crear_puerto' %}">Añadir Puertos</a></li>
             </ul>
         </div>
     </div>
+    {% endif %}
 
     <!-- Main Content -->
     <div class="container-fluid px-3 mt-5">

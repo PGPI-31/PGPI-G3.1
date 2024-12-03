@@ -6,11 +6,6 @@
 {% endblock %}
 
 {% block content %}
-<div class="mb-4">
-    <a href="{% url 'ver_catalogo' %}" class="btn btn-outline-primary">
-        &larr; Volver al catálogo
-    </a>
-</div>
 <h2 class="text-center mb-4">Resumen del Pedido</h2>
 
 <div class="order-summary mb-4">
@@ -34,6 +29,7 @@
                     </div>
                 </li>
             {% endfor %}
+            <p><strong>Gastos de gestión:</strong> {% if order.total_price > 970 %} Gratuito {% else %} 30€ {% endif %}</p>
         </ul>
     </div>
 

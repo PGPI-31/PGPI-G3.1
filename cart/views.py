@@ -82,8 +82,19 @@ def view_cart(request):
 
 
 def checkout(request):
-   cart = get_or_create_cart(request)
-   return render(request, 'checkout.html', {'cart': cart})
+    if request.method == "POST":
+        action = request.POST.get("action")
+        if action == "normal":
+            request.session['fast'] = False
+            cart = get_or_create_cart(request)
+            return render(request, 'checkout.html', {'cart': cart})
+        elif action == "fast":
+            request.session['fast'] = True
+            return redirect('create_order')
+        else:
+            return redirect('ver_catalogo')
+    else:
+        return redirect('ver_catalogo')
 
 def add_to_cart_catalogue(request, model_id):
     if request.method == "POST":
@@ -112,8 +123,12 @@ def add_to_cart_catalogue(request, model_id):
             port=port,
             available=True
         ).exclude(
-            cartitem__start_date__lt=end_date,
-            cartitem__end_date__gt=start_date,
+            order_boats__start_date__lte=end_date,
+            order_boats__end_date__gte=start_date,
+            order_boats__order__status='completed'
+        ).exclude(
+            cartitem__start_date__lte=end_date,
+            cartitem__end_date__gte=start_date
         ).first()
 
         if not available_instance:
@@ -190,6 +205,10 @@ def add_quantity(request, group_key):
         model=boat_model,
         port=port,
         available=True
+    ).exclude(
+        order_boats__start_date__lte=end_date,
+        order_boats__end_date__gte=start_date,
+        order_boats__order__status='completed'
     ).exclude(
         cartitem__start_date__lt=end_date,
         cartitem__end_date__gt=start_date

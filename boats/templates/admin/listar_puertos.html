@@ -7,6 +7,7 @@
     <div class="product-card">
         <h2>{{ puerto.name }}</h2>
         <p><strong>Dirección:</strong> {{ puerto.address }}</p>
+        <button type="submit"><a href="{% url 'modificar_puerto' port_id=puerto.id %}" style="text-decoration: none;">Modificar Puerto</a></button>
     </div>
     {% empty %}
     <p>No hay puertos disponibles.</p>

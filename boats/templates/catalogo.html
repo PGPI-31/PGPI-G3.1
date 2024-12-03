@@ -1,9 +1,62 @@
 {% extends "cesta.html" %}
+{% load static %}
+
+{% block headcontent %}
+<link rel="stylesheet" href="{% static 'css/catalogo.css' %}">
+{% endblock %}
 
 {% block title %}Catálogo{% endblock %}
 
 {% block productos %}
 <h1>Catálogo</h1>
+<form method="get" action="{% url 'ver_catalogo' %}" class="mb-4">
+    <div class="row">
+        <!-- Campo de búsqueda por título -->
+        <div class="col-md-4">
+            <input type="text" name="title" class="form-control" placeholder="Nombre del barco" value="{{ request.GET.title }}">
+        </div>
+
+        <!-- Campo de selección de tipo de barco -->
+        <div class="col-md-2">
+            <select name="boat_type" class="form-select">
+                <option value="">Todos los tipos</option>
+                {% for type in boat_types %}
+                <option value="{{ type.id }}" {% if request.GET.boat_type == type.id|stringformat:"s" %}selected{% endif %}>
+                    {{ type.name }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- Campo de selección de puerto -->
+        <div class="col-md-2">
+            <select name="port" class="form-select">
+                <option value="">Todos los puertos</option>
+                {% for port in ports %}
+                <option value="{{ port.id }}" {% if request.GET.port == port.id|stringformat:"s" %}selected{% endif %}>
+                    {{ port.name }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- Campo de fecha inicio -->
+        <div class="col-md-2">
+            <input type="date" name="start_date" class="form-control" value="{{ request.GET.start_date }}">
+        </div>
+
+        <!-- Campo de fecha fin -->
+        <div class="col-md-2">
+            <input type="date" name="end_date" class="form-control" value="{{ request.GET.end_date }}">
+        </div>
+
+        <!-- Botón de búsqueda -->
+        <div class="col-md-12 mt-3">
+            <button type="submit" class="btn btn-primary w-100">Buscar</button>
+        </div>
+    </div>
+</form>
+
 <div class="product-grid mb-4">
     {% for modelo in modelos %}
     <div class="product-card">
@@ -16,9 +69,13 @@
             <p><strong>Precio por día:</strong> {{ modelo.price_per_day }}</p>
         </a>
         <!-- Trigger Modal Button -->
+        {% if modelo.available_at_port|default:0 > 0 and modelo.available_within_dates|default:0 > 0 %}
         <button class="btn btn-primary w-100 mt-2" data-bs-toggle="modal" data-bs-target="#modal-{{ modelo.id }}">
             Alquilar
         </button>
+        {% else %}
+        <p class="text-danger">No disponible</p>
+        {% endif %}
     </div>
 
     <!-- Modal for Each Boat -->
@@ -58,4 +115,18 @@
     <p>No hay productos disponibles.</p>
     {% endfor %}
 </div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const form = document.querySelector('form[action="{% url "ver_catalogo" %}"]');
+        const startDate = form.querySelector('input[name="start_date"]');
+        const endDate = form.querySelector('input[name="end_date"]');
+
+        form.addEventListener("submit", function (event) {
+            if ((startDate.value && !endDate.value) || (!startDate.value && endDate.value)) {
+                event.preventDefault();
+                alert("Por favor, introduce ambas fechas: fecha de inicio y fecha de fin.");
+            }
+        });
+    });
+</script>
 {% endblock %}
