@@ -42,7 +42,7 @@ class BoatModelForm(forms.ModelForm):
             'price_per_day': 'Precio por día'
         }
         widgets = {
-            'release_date': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
+            'release_date': forms.DateTimeInput(attrs={'type': 'date'}),
         }
 
 
