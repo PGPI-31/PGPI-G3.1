@@ -27,6 +27,7 @@ def ver_catalogo(request):
         modelos = modelos.filter(boat_type_id=boat_type)
 
     # Filtrar por puerto si se proporciona
+    port_id = None  # Inicializar port_id con un valor predeterminado
     if port and port is not None and port != '':
         port_id = int(port)
         modelos = modelos.annotate(
@@ -43,6 +44,7 @@ def ver_catalogo(request):
                 output_field=IntegerField()
             )
         )
+
 
 
     if start_date and end_date:
