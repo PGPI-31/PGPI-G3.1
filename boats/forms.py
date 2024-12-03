@@ -31,7 +31,7 @@ class BoatModelForm(forms.ModelForm):
     
     class Meta:
         model = BoatModel
-        fields = ['boat_type', 'name', 'capacity', 'brand', 'image', 'price_per_day']
+        fields = ['boat_type', 'release_date','name', 'capacity', 'brand', 'image', 'price_per_day']
         labels = {
             'boat_type': 'Tipo de embarcación',
             'release_date': 'Fecha de lanzamiento',
@@ -40,6 +40,9 @@ class BoatModelForm(forms.ModelForm):
             'brand': 'Marca',
             'image': 'Imagen',
             'price_per_day': 'Precio por día'
+        }
+        widgets = {
+            'release_date': forms.DateTimeInput(attrs={'type': 'date'}),
         }
 
 
