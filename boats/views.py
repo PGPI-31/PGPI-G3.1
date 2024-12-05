@@ -3,9 +3,9 @@ from .models import BoatInstance, BoatModel, BoatType, Port
 from .forms import BoatInstanceForm, BoatTypeForm, BoatModelForm, PortForm
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden
-from django.db.models import Count, Q, Case, When, IntegerField, Sum
+from django.db.models import Count, Q, Case, When, IntegerField, Sum, BooleanField
 from orders.models import OrderBoat
-from datetime import datetime
+from datetime import datetime, date
 
 
 def ver_catalogo(request):
@@ -17,7 +17,9 @@ def ver_catalogo(request):
     end_date = request.GET.get('end_date')
 
     boats = BoatInstance.objects.all()
-    unavailable_boats = set() 
+    today = datetime.now().date()
+    port_id = None
+    
     # Filtrar por título si se proporciona
     if title:
         modelos = modelos.filter(name__icontains=title)
@@ -26,8 +28,7 @@ def ver_catalogo(request):
     if boat_type:
         modelos = modelos.filter(boat_type_id=boat_type)
 
-    # Filtrar por puerto si se proporciona
-    port_id = None  # Inicializar port_id con un valor predeterminado
+    # Filtrar por puerto
     if port and port is not None and port != '':
         port_id = int(port)
         modelos = modelos.annotate(
@@ -35,23 +36,36 @@ def ver_catalogo(request):
                 'instances',
                 filter=Q(instances__port_id=port_id, instances__available=True)
             )
-        )
+        ).filter(available_at_port__gt=0)
+
+        # Anotar disponibilidad hoy
+        for modelo in modelos:
+            instances = modelo.instances.filter(port_id=port_id, available=True)
+            modelo.unavailable_today = any(
+                any(order.start_date <= today <= order.end_date for order in instance.order_boats.all())
+                for instance in instances
+            )
+
     else:
+        # Anotar disponibilidad general por puerto
         modelos = modelos.annotate(
             available_at_port=Case(
                 When(pk__isnull=False, then=1),  # Every model gets 1 for availability
                 default=0,
                 output_field=IntegerField()
-            )
-        )
+            ))
+        modelos = modelos.annotate(
+            unavailable_today=Case(
+                When(pk__isnull=False, then=False),  # Every model gets 1 for availability
+                default=False,
+                output_field=BooleanField()
+            ))
 
-
-
+    # Filtrar por rango de fechas
     if start_date and end_date:
         start = datetime.strptime(start_date, "%Y-%m-%d").date()
         end = datetime.strptime(end_date, "%Y-%m-%d").date()
         for modelo in modelos:
-            # Retrieve all instances for the current model and port (if provided)
             instances = modelo.instances.filter(available=True)
             if port_id:
                 instances = instances.filter(port_id=port_id)
@@ -79,13 +93,10 @@ def ver_catalogo(request):
             )
         )
 
-    boat_types = BoatType.objects.all()
-    ports = Port.objects.all()
     context = {
         'modelos': modelos,
-        'ports': ports,
-        'boat_types': boat_types,
-        'unavailable_boats': unavailable_boats,
+        'ports': Port.objects.all(),
+        'boat_types': BoatType.objects.all(),
     }
     return render(request, 'catalogo.html', context)
 
@@ -187,6 +198,7 @@ def modify_port(request, port_id):
         
     return render(request, 'admin/modify_port.html', {'form': form})
 
+
 @login_required
 def modify_boat_type(request, type_id):
     if not request.user.is_superuser:
@@ -212,7 +224,7 @@ def modify_boat_model(request, model_id):
     boat_model = get_object_or_404(BoatModel, id=model_id)
 
     if request.method == 'POST':
-        form = BoatModelForm(request.POST, request.FILES,instance=boat_model)
+        form = BoatModelForm(request.POST, request.FILES, instance=boat_model)
         if form.is_valid():
             form.save()
             return redirect('listar_modelos')
@@ -221,14 +233,15 @@ def modify_boat_model(request, model_id):
 
     return render(request, 'admin/modify_boat_model.html', {'form': form})
 
+
 @login_required
-def modify_boat_instance(request,boat_instance_id):
+def modify_boat_instance(request, boat_instance_id):
     if not request.user.is_superuser:
         return HttpResponseForbidden("No tienes permiso para modificar una instancia de barco.")
     boat_instance = get_object_or_404(BoatInstance, id=boat_instance_id)
 
     if request.method == 'POST':
-        form = BoatInstanceForm(request.POST,instance=boat_instance)
+        form = BoatInstanceForm(request.POST, instance=boat_instance)
         if form.is_valid():
             form.save()
             return redirect('listar_productos')
