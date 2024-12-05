@@ -4,9 +4,9 @@ from venv import logger
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 import stripe
-
+from django.http import HttpResponseForbidden
 from cart.models import Cart
-from orders.forms import ClientDataForm, PaymentMethodForm
+from orders.forms import ClientDataForm, PaymentMethodForm, OrderForm, OrderBoatForm
 from orders.models import Order, OrderBoat, Cliente, Pago
 from safeport import settings
 from django.views.decorators.csrf import csrf_exempt
@@ -66,6 +66,73 @@ def create_order(request):
 
     # Redirect to the client data page
     return redirect('collect_client_data')
+
+@login_required
+def modify_order(request, order_id):
+    # Obtén el pedido a modificar
+    order = get_object_or_404(Order, id=order_id)
+
+    # Verifica si el usuario es el propietario del pedido o si es admin
+    if order.user != request.user and not request.user.is_superuser:
+        return HttpResponseForbidden("No tienes permiso para modificar este pedido.")
+
+    # Inicializar el formulario de cliente con los datos actuales
+    form = ClientDataForm(request.POST or None, instance=order.user)
+
+    # Formulario del pedido (estado y total)
+    order_form = OrderForm(request.POST or None, instance=order)
+
+    # Formularios de los artículos del pedido (OrderBoat)
+    order_boat_forms = []
+    for item in order.order_boats.all():
+        # Inicializamos los formularios con los datos actuales
+        order_boat_form = OrderBoatForm(request.POST or None, instance=item)
+        order_boat_forms.append(order_boat_form)
+
+    # Guardar el precio total actual (antes de los cambios)
+    current_total_price = order.total_price
+
+    # Inicializar el precio total recalculado
+    total_price = 0
+
+    # Procesar los formularios al recibir un POST
+    if request.method == 'POST':
+        if form.is_valid():
+            form.save()  # Guardar los datos del cliente
+
+        if order_form.is_valid():
+            order_form.save()  # Guardar el estado del pedido (sin modificar el total_price)
+
+        # Validar y guardar los artículos del pedido (OrderBoat)
+        valid = True
+        for order_boat_form in order_boat_forms:
+            if not order_boat_form.is_valid():
+                valid = False
+        if valid:
+            for order_boat_form in order_boat_forms:
+                item = order_boat_form.instance
+                # Calculamos el precio para cada artículo basado en número de días y precio por día
+                item.price = item.days * item.price_per_day  # Calculamos el precio del artículo
+                item.save()  # Guardamos el artículo con el nuevo precio calculado
+
+                # Sumar el precio del artículo al precio total de la orden
+                total_price += item.price
+
+        # Si el precio total ha cambiado, lo actualizamos
+        if total_price != current_total_price and total_price !=0 :
+            order.total_price = total_price
+            order.save()  # Guardamos la orden con el nuevo precio total calculado
+
+        # Redirigir a la vista de detalles del pedido
+        return redirect('show_order_admin', order_id=order.id)
+
+    # Renderizar la plantilla con los formularios y el precio total calculado
+    return render(request, 'admin/modificar_orden.html', {
+        'form': form,  # Formulario de datos del cliente
+        'order': order,
+        'order_form': order_form,  # Formulario de estado y total del pedido
+        'order_boat_forms': order_boat_forms,  # Formularios de los artículos del pedido
+    })
 
 
 def collect_client_data(request):
@@ -203,6 +270,25 @@ def view_order(request, order_id):
         'items': items,
     }
     return render(request, 'mostrar_pedido.html', context)
+
+@login_required
+def view_order_admin(request, order_id):
+    """
+    Muestra la pantalla del seguimiento del pedido
+    """
+    order = get_object_or_404(Order, id=order_id)
+
+    payment = order.payments.first()
+    client = Cliente.objects.filter(order=order).first()
+    items = order.order_boats.select_related('boat')
+
+    context = {
+        'order': order,
+        'payment': payment,
+        'client': client,
+        'items': items,
+    }
+    return render(request, 'admin/mostrar_pedido_admin.html', context)
 
 @login_required
 def list_orders(request):
