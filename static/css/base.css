@@ -64,3 +64,76 @@
     color: #dc2626; /* Rojo para no disponible */
     font-weight: bold;
 }
+
+.menu-container {
+    position: relative;
+}
+
+.menu-button {
+    background-color: #0a3d62;
+    color: white;
+    border: none;
+    padding: 10px;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.menu-button:hover {
+    background-color: #3c6382;
+}
+
+.side-menu {
+    width: 250px;
+    height: 100vh;
+    background-color: #3c6382;
+    position: fixed;
+    left: -250px;
+    top: 70px; /* Debajo del header */
+    transition: left 0.3s ease;
+    z-index: 1000;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+}
+
+.side-menu.active {
+    left: 0;
+}
+
+.side-menu ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.side-menu ul li a {
+    display: block;
+    padding: 15px 20px;
+    color: white;
+    text-decoration: none;
+    font-size: 1rem;
+}
+
+.side-menu ul li a:hover {
+    background-color: #0a3d62;
+}
+
+.menu-header {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Space between icon and label */
+    font-size: 18px;
+}
+
+.menu-icon {
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.menu-label {
+    font-weight: bold;
+    color: #007bff; /* Adjust the color as needed */
+}

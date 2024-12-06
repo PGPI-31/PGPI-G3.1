@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}Lista de Productos{% endblock %}
+
+{% block content %}
+<h1>Lista de Productos</h1>
+<div class="product-grid mb-4">
+    {% for producto in productos %}
+    <div class="product-card">
+        <img src="{{ producto.model.image.url }}" alt="Imagen de {{ producto.name }}" class="img-fluid">
+        <h2>{{ producto.name }}</h2>
+        <p><strong>Precio por día:</strong> {{ producto.model.price_per_day }} €</p>
+        <p>
+            <strong>Disponibilidad:</strong>
+            {% if producto.available %}
+                <span class="availability">Disponible</span>
+            {% else %}
+                <span class="not-available">No disponible</span>
+            {% endif %}
+        </p>
+        <p><strong>Puerto:</strong> {{ producto.port }}</p>
+        <p><strong>Ubicación:</strong> {{ producto.port.address }}</p>
+        <p><strong>Capacidad:</strong> {{ producto.model.capacity }}</p>
+        <p><strong>Marca:</strong> {{ producto.model.brand }}</p>
+        {% if user.is_superuser %}
+        <button type="submit"><a href="{% url 'modificar_productos' boat_instance_id=producto.id %}" style="text-decoration: none;">Modificar Producto</a></button>
+        {% endif %}
+    </div>
+    {% empty %}
+    <p>No hay productos disponibles.</p>
+    {% endfor %}
+</div>
+{% endblock %}

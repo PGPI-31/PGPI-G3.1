@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block headcontent %}
+<link rel="stylesheet" href="{% static 'css/cart.css' %}">
+{% endblock %}
+
+{% block title %}Lista de Productos{% endblock %}
+
+{% block content %}
+{% if messages %}
+<div class="container mt-3">
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+<div class="container-fluid" id="cesta">
+    <div class="row">
+        <!-- Main Content -->
+        <div class="col-md-9">
+            {% block productos %}{% endblock %}
+        </div>
+
+        <!-- Shopping Cart -->
+        <div class="col-md-3 bg-light border-start" id="shopping-cart">
+            <h4 class="text-center mt-3">Cesta</h4>
+            {% if cart and cart.items.exists %}
+                <ul class="list-group">
+                    {% for group_key, items in cart_items_grouped.items %}
+                        <!-- Boat Model Group -->
+                        <li class="list-group-item">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h5 class="fw-bold">{{ items.0.boat_instance.model.name }}</h5>
+                                    <small>Puerto: {{ items.0.boat_instance.port.name }}</small><br>
+                                    <small>Fechas: {{ items.0.start_date|date:"d/m/Y" }} - {{ items.0.end_date|date:"d/m/Y" }}</small><br>
+                                    <small>Cantidad: {{ items|length }}</small>
+                                </div>
+                                <div>
+                                    <!-- Subtract Quantity -->
+                                    <form method="post" action="{% url 'subtract_quantity' group_key %}" style="display:inline;">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-danger btn-sm">-</button>
+                                    </form>
+                                    <!-- Add Quantity -->
+                                    <form method="post" action="{% url 'add_quantity' group_key %}" style="display:inline;">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-success btn-sm">+</button>
+                                    </form>
+                                </div>
+                            </div>
+                            <!-- List Boat Instances -->
+                            <div class="mt-2 ms-3">
+                                <ul class="list-unstyled">
+                                    {% for item in items %}
+                                        <li><small><strong>Barco:</strong> {{ item.boat_instance.name }}</small></li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </li>
+                    {% endfor %}
+                    <!-- Fee card -->
+                    <li class="list-group-item">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h5 class="fw-bold"> Gastos de gestión </h5>
+                                <small>Tarifa de 30€. Gratuito en pedidos superiores a 1000€</small><br>
+                                <small>Precio: {% if cart.get_total_price > 1000 %} 0€ {% else %} 30€ {% endif %}</small>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+                <div class="text-end mt-3">
+                    <p><strong>Total: {{ cart.get_total_price }}€</strong></p>
+                    <form method="post" action="{% url 'checkout' %}">
+                        {% csrf_token %}
+                        <button class="btn btn-primary w-100" type="submit" name="action" value="normal">Revisar pedido</button>
+                        <button class="btn btn-warning w-100 mt-2" type="submit" name="action" value="fast">Compra rápida. Pago en sitio</button>
+                    </form>
+                </div>
+            {% else %}
+                <p class="text-center mt-5">Tu cesta está vacía</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

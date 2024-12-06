@@ -23,14 +23,17 @@ from django.urls import path, include
 from django.conf.urls.static import static
 from django.conf import settings
 
-from safeport.views import home
+from safeport.views import about, home
 
 urlpatterns = [
     path('', home, name='home'),
+    path('about/', about, name='ver_info'),
     path('admin/', admin.site.urls),
     path('auth/', include('authentication.urls')),
-    path('productos/', include('boats.urls'))
-
+    path('productos/', include('boats.urls')),
+    path('cesta/', include('cart.urls')),
+    path('mail/',  include('mail.urls')),
+    path('pedidos/', include('orders.urls'))
 ]
 urlpatterns += static(settings.STATIC_URL, document_root=os.path.join(settings.BASE_DIR, 'static'))
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

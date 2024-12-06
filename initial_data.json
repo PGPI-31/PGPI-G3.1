@@ -3,16 +3,48 @@
         "model": "boats.boattype",
         "pk": 1,
         "fields": {
-            "name": "Yacht",
-            "description": "A luxury boat designed for pleasure and comfortable travel."
+            "name": "Yate",
+            "description": "Un barco de lujo diseñado para el placer y viajes cómodos."
         }
     },
     {
         "model": "boats.boattype",
         "pk": 2,
         "fields": {
-            "name": "Sailboat",
-            "description": "A boat propelled by sails and used for racing or leisure."
+            "name": "Velero",
+            "description": "Un barco impulsado por velas, utilizado para regatas o recreación."
+        }
+    },
+    {
+        "model": "boats.boattype",
+        "pk": 3,
+        "fields": {
+            "name": "Lancha rápida",
+            "description": "Un barco pequeño y ágil diseñado para velocidad y transporte rápido."
+        }
+    },
+    {
+        "model": "boats.boattype",
+        "pk": 4,
+        "fields": {
+            "name": "Catamarán",
+            "description": "Un barco con dos cascos paralelos, ideal para estabilidad y espacio."
+        }
+    },
+    {
+        "model": "boats.boattype",
+        "pk": 5,
+        "fields": {
+            "name": "Barco de pesca",
+            "description": "Un barco diseñado específicamente para actividades de pesca."
+        }
+    },
+    {
+        "model": "boats.boattype",
+        "pk": 6,
+        "fields": {
+            "name": "Góndola",
+            "description": "Un bote alargado utilizado tradicionalmente en canales de Venecia."
         }
     },
     {
@@ -20,29 +52,273 @@
         "pk": 1,
         "fields": {
             "boat_type": 1,
-            "name": "Luxury Cruiser",
-            "capacity": 10,
-            "brand": "Sea Dream",
-            "image": "boat_images/luxury_cruiser.jpg"
+            "name": "Crucero de Lujo",
+            "release_date": "2018-01-15",
+            "capacity": 12,
+            "brand": "Sunseeker",
+            "image": "boat_images/crucero_de_lujo.jpg",
+            "price_per_day": "2000.00"
         }
     },
     {
         "model": "boats.boatmodel",
         "pk": 2,
         "fields": {
+            "boat_type": 1,
+            "name": "Mega Yate Imperial",
+            "release_date": "2010-04-21",
+            "capacity": 20,
+            "brand": "Azimut",
+            "image": "boat_images/mega_yate_imperial.jpg",
+            "price_per_day": "4000.99"
+        }
+    },
+    {
+        "model": "boats.boatmodel",
+        "pk": 3,
+        "fields": {
+            "boat_type": 1,
+            "name": "Eclipse Explorer",
+            "release_date": "2012-12-21",
+            "capacity": 15,
+            "brand": "Ferretti",
+            "image": "boat_images/eclipse_explorer.jpg",
+            "price_per_day": "3400.00"
+        }
+    },
+    {
+        "model": "boats.boatmodel",
+        "pk": 4,
+        "fields": {
             "boat_type": 2,
-            "name": "Ocean Racer",
+            "name": "Velero Regata",
+            "release_date": "2004-03-12",
+            "capacity": 6,
+            "brand": "Beneteau",
+            "image": "boat_images/velero_regata.jpg",
+            "price_per_day": "300.00"
+        }
+    },
+    {
+        "model": "boats.boatmodel",
+        "pk": 5,
+        "fields": {
+            "boat_type": 2,
+            "name": "Navegante de Altura",
+            "release_date": "2009-10-01",
             "capacity": 4,
-            "brand": "Wave Master",
-            "image": "boat_images/ocean_racer.jpg"
+            "brand": "Hanse",
+            "image": "boat_images/navegante_de_altura.jpg",
+            "price_per_day": "450.00"
+        }
+    },
+    {
+        "model": "boats.boatmodel",
+        "pk": 6,
+        "fields": {
+            "boat_type": 2,
+            "name": "Brisa Marina",
+            "release_date": "2014-02-08",
+            "capacity": 8,
+            "brand": "Jeanneau",
+            "image": "boat_images/brisa_marina.jpg",
+            "price_per_day": "200.00"
+        }
+    },
+    {
+        "model": "boats.boatmodel",
+        "pk": 7,
+        "fields": {
+            "boat_type": 3,
+            "name": "Relámpago Marino",
+            "release_date": "2023-03-01",
+            "capacity": 5,
+            "brand": "Bayliner",
+            "image": "boat_images/relampago_marino.jpg",
+            "price_per_day": "600.00"
+        }
+    },
+    {
+        "model": "boats.boatmodel",
+        "pk": 8,
+        "fields": {
+            "boat_type": 3,
+            "name": "Flecha Azul",
+            "release_date": "2010-12-23",
+            "capacity": 4,
+            "brand": "Yamaha",
+            "image": "boat_images/flecha_azul.jpg",
+            "price_per_day": "1060.00"
+        }
+    },
+    {
+        "model": "boats.boatmodel",
+        "pk": 9,
+        "fields": {
+            "boat_type": 3,
+            "name": "Tiburón Veloz",
+            "release_date": "2021-06-09",
+            "capacity": 6,
+            "brand": "Glastron",
+            "image": "boat_images/tiburon_veloz.jpg",
+            "price_per_day": "280.00"
+        }
+    },
+    {
+        "model": "boats.boatmodel",
+        "pk": 10,
+        "fields": {
+            "boat_type": 4,
+            "name": "Catamarán Familiar",
+            "release_date": "2024-10-11",
+            "capacity": 10,
+            "brand": "Lagoon",
+            "image": "boat_images/catamaran_familiar.jpg",
+            "price_per_day": "800.00"
+        }
+    },
+    {
+        "model": "boats.boatmodel",
+        "pk": 11,
+        "fields": {
+            "boat_type": 4,
+            "name": "Explorador Tropical",
+            "release_date": "2019-11-12",
+            "capacity": 8,
+            "brand": "Bali",
+            "image": "boat_images/explorador_tropical.jpg",
+            "price_per_day": "2500.00"
+        }
+    },
+    {
+        "model": "boats.boatmodel",
+        "pk": 12,
+        "fields": {
+            "boat_type": 4,
+            "name": "Isla Flotante",
+            "release_date": "2024-04-10",
+            "capacity": 12,
+            "brand": "Fountaine Pajot",
+            "image": "boat_images/isla_flotante.jpg",
+            "price_per_day": "1700.00"
+        }
+    },
+    {
+        "model": "boats.boatmodel",
+        "pk": 13,
+        "fields": {
+            "boat_type": 5,
+            "name": "Pesquero Clásico",
+            "release_date": "1998-01-10",
+            "capacity": 4,
+            "brand": "Aluminum Boats",
+            "image": "boat_images/pesquero_clasico.jpg",
+            "price_per_day": "600.00"
+        }
+    },
+    {
+        "model": "boats.boatmodel",
+        "pk": 14,
+        "fields": {
+            "boat_type": 5,
+            "name": "Rey del Mar",
+            "release_date": "2015-03-10",
+            "capacity": 6,
+            "brand": "Quicksilver",
+            "image": "boat_images/rey_del_mar.jpg",
+            "price_per_day": "130.00"
+        }
+    },
+    {
+        "model": "boats.boatmodel",
+        "pk": 15,
+        "fields": {
+            "boat_type": 5,
+            "name": "Pescador de Altura",
+            "release_date": "1999-01-01",
+            "capacity": 8,
+            "brand": "Lund",
+            "image": "boat_images/pescador_de_altura.jpg",
+            "price_per_day": "200.00"
+        }
+    },
+    {
+        "model": "boats.boatmodel",
+        "pk": 16,
+        "fields": {
+            "boat_type": 6,
+            "name": "Góndola Tradicional",
+            "release_date": "2002-10-01",
+            "capacity": 2,
+            "brand": "Venetian Craft",
+            "image": "boat_images/gondola_tradicional.jpg",
+            "price_per_day": "400.00"
+        }
+    },
+    {
+        "model": "boats.boatmodel",
+        "pk": 17,
+        "fields": {
+            "boat_type": 6,
+            "name": "Romántica Veneciana",
+            "release_date": "2020-02-14",
+            "capacity": 2,
+            "brand": "Canal Boats",
+            "image": "boat_images/romantica_veneciana.jpg",
+            "price_per_day": "600.00"
+        }
+    },
+    {
+        "model": "boats.boatmodel",
+        "pk": 18,
+        "fields": {
+            "boat_type": 6,
+            "name": "Estrella del Canal",
+            "release_date": "2015-02-11",
+            "capacity": 3,
+            "brand": "Classic Venice",
+            "image": "boat_images/estrella_del_canal.jpg",
+            "price_per_day": "410.00"
         }
     },
     {
         "model": "boats.port",
         "pk": 1,
         "fields": {
-            "name": "Harbor Marina",
-            "address": "123 Marina Blvd, Seaside"
+            "name": "Puerto Deportivo Central",
+            "address": "Calle Marítima 45, Barcelona"
+        }
+    },
+    {
+        "model": "boats.port",
+        "pk": 2,
+        "fields": {
+            "name": "Marina del Sol",
+            "address": "Avenida del Puerto 12, Valencia"
+        }
+    },
+    {
+        "model": "boats.port",
+        "pk": 3,
+        "fields": {
+            "name": "Bahía Serena",
+            "address": "Paseo Costero 78, Málaga"
+        }
+    },
+    {
+        "model": "boats.port",
+        "pk": 4,
+        "fields": {
+            "name": "Puerto Atlántico",
+            "address": "Rúa Porto 21, A Coruña"
+        }
+    },
+    {
+        "model": "boats.port",
+        "pk": 5,
+        "fields": {
+            "name": "Marina Costa Blanca",
+            "address": "Plaza Náutica 10, Alicante"
         }
     },
     {
@@ -50,31 +326,503 @@
         "pk": 1,
         "fields": {
             "model": 1,
-            "name": "Yacht-1",
+            "name": "Crucero de Lujo - A1",
             "port": 1,
-            "creation_date": "2020-05-10",
-            "available": true,
-            "price_per_day": "500.00"
+            "creation_date": "2018-04-15",
+            "available": true
+        }
+    },
+    {
+        "model": "boats.boatinstance",
+        "pk": 1,
+        "fields": {
+            "model": 1,
+            "name": "Crucero de Lujo - A2",
+            "port": 1,
+            "creation_date": "2018-04-15",
+            "available": true
+        }
+    },
+    {
+        "model": "boats.boatinstance",
+        "pk": 50,
+        "fields": {
+            "model": 1,
+            "name": "Crucero de Lujo - A3",
+            "port": 1,
+            "creation_date": "2018-04-15",
+            "available": true
+        }
+    },
+    {
+        "model": "boats.boatinstance",
+        "pk": 51,
+        "fields": {
+            "model": 1,
+            "name": "Crucero de Lujo - B1",
+            "port": 2,
+            "creation_date": "2019-06-20",
+            "available": false
         }
     },
     {
         "model": "boats.boatinstance",
         "pk": 2,
         "fields": {
+            "model": 1,
+            "name": "Crucero de Lujo - B2",
+            "port": 2,
+            "creation_date": "2019-06-20",
+            "available": false
+        }
+    },
+    {
+        "model": "boats.boatinstance",
+        "pk": 53,
+        "fields": {
+            "model": 1,
+            "name": "Crucero de Lujo - B3",
+            "port": 2,
+            "creation_date": "2019-06-20",
+            "available": false
+        }
+    },
+    {
+        "model": "boats.boatinstance",
+        "pk": 3,
+        "fields": {
+            "model": 1,
+            "name": "Crucero de Lujo - C",
+            "port": 3,
+            "creation_date": "2020-08-10",
+            "available": true
+        }
+    },
+    {
+        "model": "boats.boatinstance",
+        "pk": 4,
+        "fields": {
             "model": 2,
-            "name": "Sail-1",
+            "name": "Mega Yate Imperial - A1",
             "port": 1,
-            "creation_date": "2019-07-18",
-            "available": true,
-            "price_per_day": "300.00"
+            "creation_date": "2017-11-05",
+            "available": true
+        }
+    },
+    {
+        "model": "boats.boatinstance",
+        "pk": 54,
+        "fields": {
+            "model": 2,
+            "name": "Mega Yate Imperial - A2",
+            "port": 1,
+            "creation_date": "2017-11-05",
+            "available": true
+        }
+    },
+    {
+        "model": "boats.boatinstance",
+        "pk": 55,
+        "fields": {
+            "model": 2,
+            "name": "Mega Yate Imperial - A3",
+            "port": 1,
+            "creation_date": "2017-11-05",
+            "available": true
+        }
+    },
+    {
+        "model": "boats.boatinstance",
+        "pk": 5,
+        "fields": {
+            "model": 2,
+            "name": "Mega Yate Imperial - B",
+            "port": 4,
+            "creation_date": "2018-09-18",
+            "available": false
+        }
+    },
+    {
+        "model": "boats.boatinstance",
+        "pk": 6,
+        "fields": {
+            "model": 2,
+            "name": "Mega Yate Imperial - C",
+            "port": 5,
+            "creation_date": "2019-12-25",
+            "available": true
+        }
+    },
+    {
+        "model": "boats.boatinstance",
+        "pk": 7,
+        "fields": {
+            "model": 3,
+            "name": "Eclipse Explorer - A",
+            "port": 1,
+            "creation_date": "2018-03-22",
+            "available": true
+        }
+    },
+    {
+        "model": "boats.boatinstance",
+        "pk": 8,
+        "fields": {
+            "model": 3,
+            "name": "Eclipse Explorer - B",
+            "port": 3,
+            "creation_date": "2019-05-30",
+            "available": false
+        }
+    },
+    {
+        "model": "boats.boatinstance",
+        "pk": 9,
+        "fields": {
+            "model": 3,
+            "name": "Eclipse Explorer - C",
+            "port": 4,
+            "creation_date": "2020-07-12",
+            "available": true
+        }
+    },
+    {
+        "model": "boats.boatinstance",
+        "pk": 10,
+        "fields": {
+            "model": 4,
+            "name": "Velero Regata - A",
+            "port": 2,
+            "creation_date": "2017-07-12",
+            "available": true
+        }
+    },
+    {
+        "model": "boats.boatinstance",
+        "pk": 11,
+        "fields": {
+            "model": 4,
+            "name": "Velero Regata - B",
+            "port": 4,
+            "creation_date": "2018-08-23",
+            "available": true
+        }
+    },
+    {
+        "model": "boats.boatinstance",
+        "pk": 12,
+        "fields": {
+            "model": 5,
+            "name": "Navegante de Altura - A",
+            "port": 3,
+            "creation_date": "2016-05-15",
+            "available": true
+        }
+    },
+    {
+        "model": "boats.boatinstance",
+        "pk": 13,
+        "fields": {
+            "model": 5,
+            "name": "Navegante de Altura - B",
+            "port": 5,
+            "creation_date": "2017-06-18",
+            "available": false
+        }
+    },
+    {
+        "model": "boats.boatinstance",
+        "pk": 14,
+        "fields": {
+            "model": 6,
+            "name": "Brisa Marina - A",
+            "port": 1,
+            "creation_date": "2018-09-20",
+            "available": true
+        }
+    },
+    {
+        "model": "boats.boatinstance",
+        "pk": 15,
+        "fields": {
+            "model": 6,
+            "name": "Brisa Marina - B",
+            "port": 2,
+            "creation_date": "2019-11-25",
+            "available": true
+        }
+    },
+    {
+        "model": "boats.boatinstance",
+        "pk": 16,
+        "fields": {
+            "model": 7,
+            "name": "Relámpago Marino - A",
+            "port": 3,
+            "creation_date": "2018-01-10",
+            "available": true
+        }
+    },
+    {
+        "model": "boats.boatinstance",
+        "pk": 17,
+        "fields": {
+            "model": 7,
+            "name": "Relámpago Marino - B",
+            "port": 4,
+            "creation_date": "2019-03-15",
+            "available": false
+        }
+    },
+    {
+        "model": "boats.boatinstance",
+        "pk": 18,
+        "fields": {
+            "model": 8,
+            "name": "Flecha Azul - A",
+            "port": 5,
+            "creation_date": "2017-05-22",
+            "available": true
+        }
+    },
+    {
+        "model": "boats.boatinstance",
+        "pk": 19,
+        "fields": {
+            "model": 8,
+            "name": "Flecha Azul - B",
+            "port": 1,
+            "creation_date": "2018-07-30",
+            "available": true
+        }
+    },
+    {
+        "model": "boats.boatinstance",
+        "pk": 20,
+        "fields": {
+            "model": 9,
+            "name": "Tiburón Veloz - A",
+            "port": 2,
+            "creation_date": "2019-02-18",
+            "available": true
+        }
+    },
+    {
+        "model": "boats.boatinstance",
+        "pk": 21,
+        "fields": {
+            "model": 9,
+            "name": "Tiburón Veloz - B",
+            "port": 3,
+            "creation_date": "2020-04-25",
+            "available": false
+        }
+    },
+    {
+        "model": "boats.boatinstance",
+        "pk": 22,
+        "fields": {
+            "model": 10,
+            "name": "Catamarán Familiar - A",
+            "port": 4,
+            "creation_date": "2016-06-14",
+            "available": true
+        }
+    },
+    {
+        "model": "boats.boatinstance",
+        "pk": 23,
+        "fields": {
+            "model": 10,
+            "name": "Catamarán Familiar - B",
+            "port": 5,
+            "creation_date": "2017-08-19",
+            "available": true
+        }
+    },
+    {
+        "model": "boats.boatinstance",
+        "pk": 24,
+        "fields": {
+            "model": 11,
+            "name": "Explorador Tropical - A",
+            "port": 1,
+            "creation_date": "2018-10-27",
+            "available": false
+        }
+    },
+    {
+        "model": "boats.boatinstance",
+        "pk": 25,
+        "fields": {
+            "model": 11,
+            "name": "Explorador Tropical - B",
+            "port": 2,
+            "creation_date": "2019-12-05",
+            "available": true
+        }
+    },
+    {
+        "model": "boats.boatinstance",
+        "pk": 26,
+        "fields": {
+            "model": 12,
+            "name": "Isla Flotante - A",
+            "port": 3,
+            "creation_date": "2020-01-15",
+            "available": true
+        }
+    },
+    {
+        "model": "boats.boatinstance",
+        "pk": 27,
+        "fields": {
+            "model": 12,
+            "name": "Isla Flotante - B",
+            "port": 4,
+            "creation_date": "2021-03-22",
+            "available": false
+        }
+    },
+    {
+        "model": "boats.boatinstance",
+        "pk": 28,
+        "fields": {
+            "model": 13,
+            "name": "Pesquero Clásico - A",
+            "port": 5,
+            "creation_date": "2016-02-11",
+            "available": true
+        }
+    },
+    {
+        "model": "boats.boatinstance",
+        "pk": 29,
+        "fields": {
+            "model": 13,
+            "name": "Pesquero Clásico - B",
+            "port": 1,
+            "creation_date": "2017-04-18",
+            "available": true
+        }
+    },
+    {
+        "model": "boats.boatinstance",
+        "pk": 30,
+        "fields": {
+            "model": 14,
+            "name": "Rey del Mar - A",
+            "port": 2,
+            "creation_date": "2018-06-25",
+            "available": false
+        }
+    },
+    {
+        "model": "boats.boatinstance",
+        "pk": 31,
+        "fields": {
+            "model": 14,
+            "name": "Rey del Mar - B",
+            "port": 3,
+            "creation_date": "2019-08-30",
+            "available": true
+        }
+    },
+    {
+        "model": "boats.boatinstance",
+        "pk": 32,
+        "fields": {
+            "model": 15,
+            "name": "Pescador de Altura - A",
+            "port": 4,
+            "creation_date": "2020-11-12",
+            "available": true
+        }
+    },
+    {
+        "model": "boats.boatinstance",
+        "pk": 33,
+        "fields": {
+            "model": 15,
+            "name": "Pescador de Altura - B",
+            "port": 5,
+            "creation_date": "2021-01-18",
+            "available": false
+        }
+    },
+    {
+        "model": "boats.boatinstance",
+        "pk": 34,
+        "fields": {
+            "model": 16,
+            "name": "Góndola Tradicional - A",
+            "port": 1,
+            "creation_date": "2015-05-05",
+            "available": true
+        }
+    },
+    {
+        "model": "boats.boatinstance",
+        "pk": 35,
+        "fields": {
+            "model": 16,
+            "name": "Góndola Tradicional - B",
+            "port": 2,
+            "creation_date": "2016-07-15",
+            "available": true
+        }
+    },
+    {
+        "model": "boats.boatinstance",
+        "pk": 36,
+        "fields": {
+            "model": 17,
+            "name": "Romántica Veneciana - A",
+            "port": 3,
+            "creation_date": "2017-09-22",
+            "available": false
+        }
+    },
+    {
+        "model": "boats.boatinstance",
+        "pk": 37,
+        "fields": {
+            "model": 17,
+            "name": "Romántica Veneciana - B",
+            "port": 4,
+            "creation_date": "2018-11-30",
+            "available": true
+        }
+    },
+    {
+        "model": "boats.boatinstance",
+        "pk": 38,
+        "fields": {
+            "model": 18,
+            "name": "Estrella del Canal - A",
+            "port": 5,
+            "creation_date": "2019-02-10",
+            "available": true
+        }
+    },
+    {
+        "model": "boats.boatinstance",
+        "pk": 39,
+        "fields": {
+            "model": 18,
+            "name": "Estrella del Canal - B",
+            "port": 1,
+            "creation_date": "2020-04-18",
+            "available": false
         }
     },
     {
         "model": "authentication.user",
         "pk": 1,
         "fields": {
-            "username": "testuser",
-            "email": "testuser@example.com",
+            "email": "user@test.com",
+            "name": "Test User",
+            "surname": "Test Surname",
             "telephone": "123456789",
             "address": "456 Sample St",
             "dni": "A12345678",
@@ -88,8 +836,6 @@
         "fields": {
             "user": 1,
             "order_date": "2023-03-16T17:41:28+00:00",
-            "start_date": "2023-10-20",
-            "end_date": "2023-10-25",
             "total_price": "3000.00",
             "status": "completed"
         }
@@ -101,6 +847,8 @@
             "order": 1,
             "boat": 1,
             "days": 5,
+            "start_date": "2023-10-20",
+            "end_date": "2023-10-25",
             "price_per_day": "500.00",
             "price": "2500.00"
         }
@@ -112,6 +860,8 @@
             "order": 1,
             "boat": 2,
             "days": 5,
+            "start_date": "2023-10-20",
+            "end_date": "2023-10-25",
             "price_per_day": "100.00",
             "price": "500.00"
         }
@@ -122,7 +872,7 @@
         "fields": {
             "order": 1,
             "payment_address": "456 Sample St",
-            "method": "card",
+            "method": "online",
             "account_number": "1234567890"
         }
     }

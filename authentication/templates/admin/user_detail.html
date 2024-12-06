@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block headcontent %}
+<link rel="stylesheet" href="{% static 'css/cart.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="mb-4">
+    <a href="{% url 'user_list' %}" class="btn btn-outline-primary">
+        &larr; Volver a usuarios
+    </a>
+</div>
+<h2 class="text-center mb-4">Ficha de usuario</h2>
+
+<div class="order-summary mb-4">
+    <div class="cart-items mb-4">
+        <ul class="list-group">
+                <li class="list-group-item">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h5>ID: {{ user.id }}</h5>
+                            <p><strong>Correo:</strong> {{ user.email }}</p>
+                            <p><strong>Nombre:</strong> {{ user.name }}</p>
+                            <p><strong>Apellido:</strong> {{ user.surname }}</p>
+                            <p><strong>Teléfono:</strong> {{ user.telephone }}</p>
+                            <p><strong>Dirección:</strong> {{ user.address }}</p>
+                            <p><strong>DNI:</strong> {{ user.dni }}</p>
+                            <p><strong>Fecha de nacimiento:</strong> {{ user.birthdate }}</p>
+                            <p><strong>¿Es administrador?:</strong> {{ user.is_superuser|yesno:"Sí,No" }}</p>
+                            <button type="submit"><a href="{% url 'modify_user' user_id=user.id %}" style="text-decoration: none;">Modificar Usuario</a></button>
+                        </div>
+                    </div>
+                </li>
+        </ul>
+    </div>
+</div>
+{% endblock %}

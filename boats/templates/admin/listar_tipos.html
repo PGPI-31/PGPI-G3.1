@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Lista de Tipos de Barcos</h1>
+<div class="product-grid mb-4">
+    {% for tipo in tipos %}
+    <div class="product-card">
+        <h2>{{ tipo.name }}</h2>
+        <p><strong>Descripción:</strong> {{ tipo.description }}</p>
+        <button type="submit"><a href="{% url 'modificar_tipo' type_id=tipo.id %}" style="text-decoration: none;">Modificar Tipo</a></button>
+
+    </div>
+    {% empty %}
+    <p>No hay tipos de barcos disponibles.</p>
+    {% endfor %}
+</div>
+{% endblock %}

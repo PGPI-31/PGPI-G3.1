@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmación del pedido</title>
+</head>
+<body>
+    <h1>¡Gracias por tu pedido en SafePort, {{ client.name }}!</h1>
+
+    <a href="{{ ruta }}" target="_blank">Puedes visualizar tu pedido en safeport pulsando aquí</a>
+    
+    <p>A continuación te presentamos los detalles de tu pedido:</p>
+
+    <h3>Detalles del Pedido</h3>
+    <ul>
+        <li><strong>ID del Pedido:</strong> {{ order.id }}</li>
+        <li><strong>Fecha del Pedido:</strong> {{ order.order_date|date:"d/m/Y" }}</li>
+        <li><strong>Total:</strong> {{ order.total_price }} €</li>
+        <li><strong>Estado:</strong> {{ order.get_status_in_spanish }}</li>
+    </ul>
+
+    <h4>Barcos:</h4>
+
+    {% for item in items %}
+        <ul>
+            <li><strong>{{item.boat.name}}</strong></li>
+            <li><strong>Puerto:</strong> {{item.boat.port.name}}</li>
+            <li><strong>Fecha inicio:</strong> {{ item.start_date|date:"d/m/Y" }}</li>
+            <li><strong>Fecha fin:</strong> {{ item.end_date|date:"d/m/Y" }}</li>
+            <li><strong>Precio por día:</strong> {{ item.price_per_day }}</li>
+            <li><strong>Número de días:</strong> {{ item.days }}</li>
+        </ul>
+            <p><strong>Total:</strong> ${{ item.price }}</p>
+    {% endfor %}
+    
+    <p><strong>Gastos de gestión:</strong> {% if order.total_price > 970 %} Gratuito {% else %} 30€ {% endif %}</p>
+
+    <h4>Precio total: ${{ order.total_price }}</h4>
+
+    <h4>Datos del cliente: </h4>
+
+    <ul>
+        <li><strong>Nombre:</strong> {{ client.name }} {{ client.surname }}</li>
+        <li><strong>Teléfono:</strong> {{ client.telephone }}</li>
+        <li><strong>Email:</strong> {{ client.email }}</li>
+        <li><strong>Dirección:</strong> {{ client.address }}</li>
+    </ul>
+
+    <h4>Información del pago: </h4>
+    {% if payment %}
+    <ul>
+        <li><strong>Método de Pago:</strong> {{ payment.get_method_display }}</li>
+        {% if payment.payment_address %}
+        <li><strong>Dirección de Pago:</strong> {{ payment.payment_address }}</li>
+        {% endif %}
+        {% if payment.account_number %}
+        <li><strong>Número de Cuenta:</strong> {{ payment.account_number }}</li>
+        {% endif %}
+    </ul>
+    {% endif %}
+
+    <p>Si tienes alguna pregunta, no dudes en contactarnos.</p>
+    <p><strong>Equipo de Safeport</strong></p>
+</body>
+</html>
