@@ -77,7 +77,17 @@ def modify_order(request, order_id):
         return HttpResponseForbidden("No tienes permiso para modificar este pedido.")
 
     # Inicializar el formulario de cliente con los datos actuales
-    form = ClientDataForm(request.POST or None, instance=order.user)
+    cliente = get_object_or_404(Cliente, order=order)
+    initial_data = {
+            'name': cliente.name,
+            'surname': cliente.surname,
+            'telephone': cliente.telephone,
+            'email': cliente.email,
+            'address': cliente.address,
+            'dni': cliente.dni,
+            'birthdate': cliente.birthdate.strftime('%Y-%m-%d') if request.user.birthdate else '',
+    }
+    form = ClientDataForm(request.POST or None, instance=cliente, initial=initial_data)
 
     # Formulario del pedido (estado y total)
     order_form = OrderForm(request.POST or None, instance=order)
