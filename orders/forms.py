@@ -8,7 +8,7 @@ from orders.models import OrderBoat
 class ClientDataForm(forms.ModelForm):
     class Meta:
         model = Cliente
-        fields = ['name', 'surname', 'telephone', 'email', 'address', 'dni']
+        fields = ['name', 'surname', 'telephone', 'email', 'address', 'dni', 'birthdate']
         
         widgets = {
             'birthdate': forms.DateInput(attrs={'type': 'date'}),  # Esto asegura que se use un campo tipo date para fecha
@@ -21,6 +21,7 @@ class ClientDataForm(forms.ModelForm):
             'email': 'Correo electrónico',
             'address': 'Dirección',
             'dni': 'DNI',
+            'birthdate': 'Fecha de Nacimiento'
         }
 
         help_texts = {
@@ -30,6 +31,7 @@ class ClientDataForm(forms.ModelForm):
             'email': 'Ingresa tu dirección de correo electrónico.',
             'address': 'Ingresa tu dirección de residencia.',
             'dni': 'Ingresa tu número de DNI.',
+            'birthdate': 'Ingresa tu fecha de nacimiento.'
         }
 
         error_messages = {
@@ -56,7 +58,9 @@ class ClientDataForm(forms.ModelForm):
                 'required': 'El DNI es obligatorio.',
                 'max_length': 'El DNI no puede exceder los 10 caracteres.'
             },
-            
+            'birthdate': {
+                'required': 'La fecha de nacimiento es obligatoria.'
+            }
         }
         
 class PaymentMethodForm(forms.Form):

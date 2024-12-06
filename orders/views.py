@@ -116,23 +116,18 @@ def collect_client_data(request):
     order_id = request.session.get('order_id')
     order = get_object_or_404(Order, id=order_id)
 
+    initial_data = {}
     # Get the order (logged-in or anonymous)
     if request.user.is_authenticated:
-        if order:
-            # Automatically create a Cliente using the logged-in user's data
-            Cliente.objects.get_or_create(
-                order=order,
-                defaults={
-                    'name': request.user.name,
-                    'surname': request.user.surname,
-                    'telephone': request.user.telephone,
-                    'email': request.user.email,
-                    'address': request.user.address,
-                    'dni': request.user.dni,
-                    'birthdate': request.user.birthdate,
-                }
-            )
-            return redirect('select_payment_method')
+        initial_data = {
+            'name': request.user.name,
+            'surname': request.user.surname,
+            'telephone': request.user.telephone,
+            'email': request.user.email,
+            'address': request.user.address,
+            'dni': request.user.dni,
+            'birthdate': request.user.birthdate.strftime('%Y-%m-%d') if request.user.birthdate else '',
+        }
 
     # Handle anonymous client data
     if request.method == 'POST':
@@ -147,11 +142,11 @@ def collect_client_data(request):
                 email=form.cleaned_data['email'],
                 address=form.cleaned_data['address'],
                 dni=form.cleaned_data['dni'],
-                birthdate=form.cleaned_data['birthdate'],
+                birthdate=form.cleaned_data['birthdate']
             )
             return redirect('select_payment_method')
     else:
-        form = ClientDataForm()
+        form = ClientDataForm(initial=initial_data)
 
     return render(request, 'collect_client_data.html', {'form': form})
 
