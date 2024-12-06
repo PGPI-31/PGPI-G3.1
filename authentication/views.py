@@ -2,8 +2,8 @@ import logging
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-from django.urls import reverse_lazy
-from django.http import HttpResponseForbidden
+from django.urls import reverse, reverse_lazy
+from django.http import HttpResponseForbidden, HttpResponseRedirect
 from django.contrib.auth.signals import user_logged_in
 from django.contrib.auth.decorators import login_required
 from authentication.forms import UserLoginForm, UserRegisterForm
@@ -30,7 +30,9 @@ def user_login(request):
             if user is not None:
                 login(request, user)
                 user_logged_in.connect(merge_carts)
-                return redirect('home')
+                # Redirect to the `next` parameter if present, or 'home' by default
+                next_url = request.GET.get('next') or reverse('home')
+                return HttpResponseRedirect(next_url)
     else:
         form = UserLoginForm()
     return render(request, 'login.html', {'form': form})

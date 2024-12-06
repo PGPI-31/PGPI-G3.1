@@ -10,6 +10,9 @@
     <div class="row justify-content-center">
         <div class="col-md-6">
             <h2 class="text-center mb-4">Datos del cliente</h2>
+            {% if not user.is_authenticated %}
+            <p>¿Tienes una cuenta?: <a href="{% url 'login' %}?next={{ request.path }}">Inicia sesión</a></p>
+            {% endif %}
             <!-- Display errors if any -->
             {% if form.errors %}
                 <div class="alert alert-danger">
