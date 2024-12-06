@@ -3,9 +3,10 @@ from .models import BoatInstance, BoatModel, BoatType, Port
 from .forms import BoatInstanceForm, BoatTypeForm, BoatModelForm, PortForm
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden
-from django.db.models import Count, Q, Case, When, IntegerField, Sum
+from django.db.models import Count, Q, Case, When, IntegerField, Prefetch, F
 from orders.models import OrderBoat
 from datetime import datetime
+from collections import defaultdict
 
 
 def ver_catalogo(request):
@@ -24,33 +25,11 @@ def ver_catalogo(request):
 
     # Filtrar por tipo de barco si se proporciona
     if boat_type:
-        modelos = modelos.filter(boat_type_id=boat_type)
+        modelos = modelos.filter(boat_type_id=boat_type, instances__available=True).distinct()
 
     # Filtrar por puerto si se proporciona
     if port and port is not None and port != '':
-        modelos = modelos.filter(instances__port_id=port).distinct()
-
-    """
-    port_id = None  # Inicializar port_id con un valor predeterminado
-    if port and port is not None and port != '':
-        port_id = int(port)
-        modelos = modelos.annotate(
-            available_at_port=Count(
-                'instances',
-                filter=Q(instances__port_id=port_id, instances__available=True)
-            )
-        )
-    else:
-        modelos = modelos.annotate(
-            available_at_port=Case(
-                When(pk__isnull=False, then=1),  # Every model gets 1 for availability
-                default=0,
-                output_field=IntegerField()
-            )
-        )
-    """
-
-
+        modelos = modelos.filter(instances__port_id=port, instances__available=True).distinct()
 
     if start_date and end_date:
         start = datetime.strptime(start_date, "%Y-%m-%d").date()
@@ -83,14 +62,23 @@ def ver_catalogo(request):
                 output_field=IntegerField()
             )
         )
-
+    
     boat_types = BoatType.objects.all()
     ports = Port.objects.all()
+
+    instance_counts = defaultdict(int)
+    for modelo in modelos:
+        for instance in modelo.instances.all():
+            if instance.available:
+                key = f"{modelo.id}_{instance.port_id}"  # Create a unique string key
+                instance_counts[key] += 1
+    
     context = {
         'modelos': modelos,
         'ports': ports,
         'boat_types': boat_types,
         'unavailable_boats': unavailable_boats,
+        'instance_counts': dict(instance_counts)
     }
     return render(request, 'catalogo.html', context)
 
