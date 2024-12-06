@@ -27,6 +27,10 @@ def ver_catalogo(request):
         modelos = modelos.filter(boat_type_id=boat_type)
 
     # Filtrar por puerto si se proporciona
+    if port and port is not None and port != '':
+        modelos = modelos.filter(instances__port_id=port).distinct()
+
+    """
     port_id = None  # Inicializar port_id con un valor predeterminado
     if port and port is not None and port != '':
         port_id = int(port)
@@ -44,6 +48,7 @@ def ver_catalogo(request):
                 output_field=IntegerField()
             )
         )
+    """
 
 
 
@@ -53,8 +58,8 @@ def ver_catalogo(request):
         for modelo in modelos:
             # Retrieve all instances for the current model and port (if provided)
             instances = modelo.instances.filter(available=True)
-            if port_id:
-                instances = instances.filter(port_id=port_id)
+            if port:
+                instances = instances.filter(port_id=port)
 
             # Initialize the count of available instances
             available_count = 0
