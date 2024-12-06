@@ -102,6 +102,7 @@ def add_to_cart_catalogue(request, model_id):
         start_date = request.POST.get('start_date')
         end_date = request.POST.get('end_date')
         port_id = request.POST.get('dock')
+        quantity = int(request.POST.get('quantity', 1))
 
         # Validate the dates
         try:
@@ -118,7 +119,7 @@ def add_to_cart_catalogue(request, model_id):
         boat_model = get_object_or_404(BoatModel, id=model_id)
 
         # Check if there is an available boat instance of this model at the port
-        available_instance = BoatInstance.objects.filter(
+        available_instances = BoatInstance.objects.filter(
             model=boat_model,
             port=port,
             available=True
@@ -129,10 +130,10 @@ def add_to_cart_catalogue(request, model_id):
         ).exclude(
             cartitem__start_date__lte=end_date,
             cartitem__end_date__gte=start_date
-        ).first()
+        )[:quantity]  # Limit to the requested quantity
 
-        if not available_instance:
-            messages.error(request, f"No hay barcos {boat_model.name} en {port.name} disponibles para la fecha seleccionada.")
+        if len(available_instances) < quantity:
+            messages.error(request, f"No hay suficientes barcos {boat_model.name} en {port.name} disponibles para la fecha seleccionada.")
             return redirect(request.META.get('HTTP_REFERER', 'index'))
 
         # Get or create the user's cart
@@ -140,16 +141,17 @@ def add_to_cart_catalogue(request, model_id):
 
         # Add the item to the cart
         number_of_days = (end_date - start_date).days
-        CartItem.objects.create(
-            cart=cart,
-            boat_instance=available_instance,
-            start_date=start_date,
-            end_date=end_date,
-            number_of_days=number_of_days,
-            price_per_day=available_instance.model.price_per_day,
-        )
+        for instance in available_instances:
+            CartItem.objects.create(
+                cart=cart,
+                boat_instance=instance,
+                start_date=start_date,
+                end_date=end_date,
+                number_of_days=number_of_days,
+                price_per_day=instance.model.price_per_day,
+            )
 
-        messages.success(request, f"{boat_model.name} ha sido añadido a tu cesta.")
+        messages.success(request, f"{quantity} {boat_model.name}(s) han sido añadidos a tu cesta.")
         return redirect(request.META.get('HTTP_REFERER', 'index'))
 
     # If the request is not POST, redirect to catalogue

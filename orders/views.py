@@ -4,9 +4,9 @@ from venv import logger
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 import stripe
-
+from django.http import HttpResponseForbidden
 from cart.models import Cart
-from orders.forms import ClientDataForm, PaymentMethodForm
+from orders.forms import ClientDataForm, PaymentMethodForm, OrderForm
 from orders.models import Order, OrderBoat, Cliente, Pago
 from safeport import settings
 from django.views.decorators.csrf import csrf_exempt
@@ -67,28 +67,67 @@ def create_order(request):
     # Redirect to the client data page
     return redirect('collect_client_data')
 
+@login_required
+def modify_order(request, order_id):
+    # Obtén el pedido a modificar
+    order = get_object_or_404(Order, id=order_id)
+
+    # Verifica si el usuario es el propietario del pedido o si es admin
+    if order.user != request.user and not request.user.is_superuser:
+        return HttpResponseForbidden("No tienes permiso para modificar este pedido.")
+
+    # Inicializar el formulario de cliente con los datos actuales
+    form = ClientDataForm(request.POST or None, instance=order.user)
+
+    # Formulario del pedido (estado y total)
+    order_form = OrderForm(request.POST or None, instance=order)
+
+    # Guardar el precio total actual (antes de los cambios)
+    current_total_price = order.total_price
+
+    # Inicializar el precio total recalculado
+    total_price = 0
+
+    # Procesar los formularios al recibir un POST
+    if request.method == 'POST':
+        if form.is_valid():
+            form.save()  # Guardar los datos del cliente
+
+        if order_form.is_valid():
+            order_form.save()  # Guardar el estado del pedido (sin modificar el total_price)
+
+        # Si el precio total ha cambiado, lo actualizamos
+        if total_price != current_total_price and total_price !=0 :
+            order.total_price = total_price
+            order.save()  # Guardamos la orden con el nuevo precio total calculado
+
+        # Redirigir a la vista de detalles del pedido
+        return redirect('show_order_admin', order_id=order.id)
+
+    # Renderizar la plantilla con los formularios y el precio total calculado
+    return render(request, 'admin/modificar_orden.html', {
+        'form': form,  # Formulario de datos del cliente
+        'order': order,
+        'order_form': order_form  # Formulario de estado y total del pedido
+    })
+
 
 def collect_client_data(request):
     order_id = request.session.get('order_id')
     order = get_object_or_404(Order, id=order_id)
 
+    initial_data = {}
     # Get the order (logged-in or anonymous)
     if request.user.is_authenticated:
-        if order:
-            # Automatically create a Cliente using the logged-in user's data
-            Cliente.objects.get_or_create(
-                order=order,
-                defaults={
-                    'name': request.user.name,
-                    'surname': request.user.surname,
-                    'telephone': request.user.telephone,
-                    'email': request.user.email,
-                    'address': request.user.address,
-                    'dni': request.user.dni,
-                    'birthdate': request.user.birthdate,
-                }
-            )
-            return redirect('select_payment_method')
+        initial_data = {
+            'name': request.user.name,
+            'surname': request.user.surname,
+            'telephone': request.user.telephone,
+            'email': request.user.email,
+            'address': request.user.address,
+            'dni': request.user.dni,
+            'birthdate': request.user.birthdate.strftime('%Y-%m-%d') if request.user.birthdate else '',
+        }
 
     # Handle anonymous client data
     if request.method == 'POST':
@@ -103,11 +142,11 @@ def collect_client_data(request):
                 email=form.cleaned_data['email'],
                 address=form.cleaned_data['address'],
                 dni=form.cleaned_data['dni'],
-                birthdate=form.cleaned_data['birthdate'],
+                birthdate=form.cleaned_data['birthdate']
             )
             return redirect('select_payment_method')
     else:
-        form = ClientDataForm()
+        form = ClientDataForm(initial=initial_data)
 
     return render(request, 'collect_client_data.html', {'form': form})
 
@@ -125,8 +164,6 @@ def select_payment_method(request):
         payment.payment_address = None
         payment.account_number = None
         payment.save()
-        order.status = 'completed'
-        order.save()
         base_url = request.build_absolute_uri('/')
         ruta = base_url + 'pedidos/ver/' + str(order.id) + '/'
         send_order_mail(order, ruta)
@@ -145,8 +182,6 @@ def select_payment_method(request):
                 payment.payment_address = None
                 payment.account_number = None
                 payment.save()
-                order.status = 'completed'
-                order.save()
                 base_url = request.build_absolute_uri('/')
                 ruta = base_url + 'pedidos/ver/' + str(order.id) + '/'
                 send_order_mail(order, ruta)
@@ -203,6 +238,25 @@ def view_order(request, order_id):
         'items': items,
     }
     return render(request, 'mostrar_pedido.html', context)
+
+@login_required
+def view_order_admin(request, order_id):
+    """
+    Muestra la pantalla del seguimiento del pedido
+    """
+    order = get_object_or_404(Order, id=order_id)
+
+    payment = order.payments.first()
+    client = Cliente.objects.filter(order=order).first()
+    items = order.order_boats.select_related('boat')
+
+    context = {
+        'order': order,
+        'payment': payment,
+        'client': client,
+        'items': items,
+    }
+    return render(request, 'admin/mostrar_pedido_admin.html', context)
 
 @login_required
 def list_orders(request):

@@ -28,6 +28,7 @@
                             <p><strong>DNI:</strong> {{ user.dni }}</p>
                             <p><strong>Fecha de nacimiento:</strong> {{ user.birthdate }}</p>
                             <p><strong>¿Es administrador?:</strong> {{ user.is_superuser|yesno:"Sí,No" }}</p>
+                            <button type="submit"><a href="{% url 'modify_user' user_id=user.id %}" style="text-decoration: none;">Modificar Usuario</a></button>
                         </div>
                     </div>
                 </li>
