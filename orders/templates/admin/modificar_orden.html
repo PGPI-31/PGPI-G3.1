@@ -68,26 +68,6 @@
                     </div>
                 {% endfor %}
 
-                <!-- Formulario de artículos del pedido (OrderBoats) -->
-                <h4>Artículos del Pedido</h4>
-                {% for order_boat_form in order_boat_forms %}
-                    <div class="mb-4">
-                        {% for field in order_boat_form %}
-                            <div class="mb-3">
-                                <label for="{{ field.id_for_label }}" class="d-block fw-bold mb-2">{{ field.label }}</label>
-                                <div style="width: 100%;">{{ field }}</div>
-                                {% if field.errors %}
-                                    <div class="text-danger mt-1">
-                                        {% for error in field.errors %}
-                                            <small>{{ error }}</small>
-                                        {% endfor %}
-                                    </div>
-                                {% endif %}
-                            </div>
-                        {% endfor %}
-                    </div>
-                {% endfor %}
-
                 <!-- Botón de guardar -->
                 <button type="submit" class="btn btn-dark-blue w-100 py-2">Guardar</button>
             </form>

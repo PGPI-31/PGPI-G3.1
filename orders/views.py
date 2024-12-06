@@ -6,7 +6,7 @@ from django.urls import reverse
 import stripe
 from django.http import HttpResponseForbidden
 from cart.models import Cart
-from orders.forms import ClientDataForm, PaymentMethodForm, OrderForm, OrderBoatForm
+from orders.forms import ClientDataForm, PaymentMethodForm, OrderForm
 from orders.models import Order, OrderBoat, Cliente, Pago
 from safeport import settings
 from django.views.decorators.csrf import csrf_exempt
@@ -82,13 +82,6 @@ def modify_order(request, order_id):
     # Formulario del pedido (estado y total)
     order_form = OrderForm(request.POST or None, instance=order)
 
-    # Formularios de los artículos del pedido (OrderBoat)
-    order_boat_forms = []
-    for item in order.order_boats.all():
-        # Inicializamos los formularios con los datos actuales
-        order_boat_form = OrderBoatForm(request.POST or None, instance=item)
-        order_boat_forms.append(order_boat_form)
-
     # Guardar el precio total actual (antes de los cambios)
     current_total_price = order.total_price
 
@@ -103,21 +96,6 @@ def modify_order(request, order_id):
         if order_form.is_valid():
             order_form.save()  # Guardar el estado del pedido (sin modificar el total_price)
 
-        # Validar y guardar los artículos del pedido (OrderBoat)
-        valid = True
-        for order_boat_form in order_boat_forms:
-            if not order_boat_form.is_valid():
-                valid = False
-        if valid:
-            for order_boat_form in order_boat_forms:
-                item = order_boat_form.instance
-                # Calculamos el precio para cada artículo basado en número de días y precio por día
-                item.price = item.days * item.price_per_day  # Calculamos el precio del artículo
-                item.save()  # Guardamos el artículo con el nuevo precio calculado
-
-                # Sumar el precio del artículo al precio total de la orden
-                total_price += item.price
-
         # Si el precio total ha cambiado, lo actualizamos
         if total_price != current_total_price and total_price !=0 :
             order.total_price = total_price
@@ -130,8 +108,7 @@ def modify_order(request, order_id):
     return render(request, 'admin/modificar_orden.html', {
         'form': form,  # Formulario de datos del cliente
         'order': order,
-        'order_form': order_form,  # Formulario de estado y total del pedido
-        'order_boat_forms': order_boat_forms,  # Formularios de los artículos del pedido
+        'order_form': order_form  # Formulario de estado y total del pedido
     })
 
 
@@ -192,8 +169,6 @@ def select_payment_method(request):
         payment.payment_address = None
         payment.account_number = None
         payment.save()
-        order.status = 'completed'
-        order.save()
         base_url = request.build_absolute_uri('/')
         ruta = base_url + 'pedidos/ver/' + str(order.id) + '/'
         send_order_mail(order, ruta)
@@ -212,8 +187,6 @@ def select_payment_method(request):
                 payment.payment_address = None
                 payment.account_number = None
                 payment.save()
-                order.status = 'completed'
-                order.save()
                 base_url = request.build_absolute_uri('/')
                 ruta = base_url + 'pedidos/ver/' + str(order.id) + '/'
                 send_order_mail(order, ruta)

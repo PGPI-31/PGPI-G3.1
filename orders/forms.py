@@ -78,33 +78,3 @@ class OrderForm(forms.ModelForm):
         widget=forms.Select(attrs={'class': 'form-control'}),
         required=True
     )
-   
-
-class OrderBoatForm(forms.ModelForm):
-    class Meta:
-        model = OrderBoat
-        fields = ['start_date', 'end_date', 'days', 'price_per_day']
-
-    start_date = forms.DateField(
-        label="Fecha de Inicio",
-        widget=forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
-        required=True
-    )
-
-    end_date = forms.DateField(
-        label="Fecha de Fin",
-        widget=forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
-        required=True
-    )
-
-    days = forms.IntegerField(
-        label="Número de Días",
-        widget=forms.NumberInput(attrs={'class': 'form-control'}),
-        required=True
-    )
-
-    price_per_day = forms.DecimalField(
-        label="Precio por Día (€)",
-        widget=forms.NumberInput(attrs={'class': 'form-control'}),
-        required=True
-    )
